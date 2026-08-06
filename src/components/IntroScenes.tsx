@@ -48,12 +48,15 @@ export function IntroScenes() {
       frame = requestAnimationFrame(update)
     }
     update()
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
     window.addEventListener('scroll', requestUpdate, { passive: true })
     window.addEventListener('resize', requestUpdate)
+    motionPreference.addEventListener('change', requestUpdate)
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', requestUpdate)
       window.removeEventListener('resize', requestUpdate)
+      motionPreference.removeEventListener('change', requestUpdate)
     }
   }, [])
 
@@ -70,7 +73,10 @@ export function IntroScenes() {
         <div className="domain-map">
           <svg
             className={domainState.tick === 0 ? '' : `domain-switch-${domainState.tick % 2 ? 'a' : 'b'}`}
+            width="420"
+            height="420"
             viewBox="0 0 420 420"
+            preserveAspectRatio="xMidYMid meet"
             aria-hidden="true"
           >
             <path className="domain-draw domain-draw--outer" pathLength="1" d="M210 36L374 210L210 384L46 210Z" fill="none" stroke="currentColor" strokeWidth="2" />

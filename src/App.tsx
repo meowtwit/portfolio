@@ -14,7 +14,7 @@ import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { WorksPage } from './pages/WorksPage'
 import { NavigationProvider } from './router/A'
-import { createBrowserHistory } from './router/history'
+import { createBrowserHistory, withBasePath } from './router/history'
 
 const history = createBrowserHistory()
 
@@ -161,19 +161,71 @@ export default function App() {
   }, [beginTransition])
 
   const route = useMemo(() => {
-    if (pathname === '/') return { title: '早雲楓人 — Portfolio', page: <HomePage /> }
-    if (pathname === '/works') return { title: '作品 — 早雲楓人', page: <WorksPage initialSlug={worksSelection} /> }
-    if (pathname === '/about') return { title: '人物 — 早雲楓人', page: <AboutPage /> }
-    if (pathname === '/contact') return { title: '連絡 — 早雲楓人', page: <ContactPage /> }
+    if (pathname === '/') return {
+      title: '早雲楓人 — Portfolio',
+      description: '早雲楓人のポートフォリオ。AI、ソフトウェア、フィジカルシステムを、現場で動く形まで実装した制作記録。',
+      noindex: false,
+      page: <HomePage />,
+    }
+    if (pathname === '/works') return {
+      title: '作品 — 早雲楓人',
+      description: '早雲楓人の作品12件。AI、ソフトウェア、オートメーション、ロボティクスなどの設計・実装・検証を紹介します。',
+      noindex: false,
+      page: <WorksPage initialSlug={worksSelection} />,
+    }
+    if (pathname === '/about') return {
+      title: '人物 — 早雲楓人',
+      description: '神山まるごと高専で学ぶ早雲楓人のプロフィール、制作領域、活動・経歴。',
+      noindex: false,
+      page: <AboutPage />,
+    }
+    if (pathname === '/contact') return {
+      title: '連絡 — 早雲楓人',
+      description: '早雲楓人への制作、開発、研究に関する問い合わせフォーム、連絡先、外部リンク。',
+      noindex: false,
+      page: <ContactPage />,
+    }
     const match = pathname.match(/^\/works\/([^/]+)$/)
     if (match) {
       const work = findWork(decodeURIComponent(match[1]))
-      if (work) return { title: `${work.title} — 早雲楓人`, page: <WorkDetailLayout work={work} /> }
+      if (work) return { title: `${work.title} — 早雲楓人`, description: work.shortDescription, noindex: false, page: <WorkDetailLayout work={work} /> }
     }
-    return { title: '404 — 早雲楓人', page: <NotFoundPage /> }
+    return {
+      title: '404 — 早雲楓人',
+      description: '指定されたページは見つかりませんでした。早雲楓人のポートフォリオトップへ戻れます。',
+      noindex: true,
+      page: <NotFoundPage />,
+    }
   }, [pathname, worksSelection])
 
-  useEffect(() => { document.title = route.title }, [route.title])
+  useEffect(() => {
+    const setMeta = (selector: string, attribute: 'name' | 'property', key: string, content: string) => {
+      let element = document.head.querySelector<HTMLMetaElement>(selector)
+      if (!element) {
+        element = document.createElement('meta')
+        element.setAttribute(attribute, key)
+        document.head.append(element)
+      }
+      element.content = content
+    }
+
+    document.title = route.title
+    setMeta('meta[name="description"]', 'name', 'description', route.description)
+    setMeta('meta[property="og:title"]', 'property', 'og:title', route.title)
+    setMeta('meta[property="og:description"]', 'property', 'og:description', route.description)
+    setMeta('meta[property="og:type"]', 'property', 'og:type', detailSlug(pathname) ? 'article' : 'website')
+    setMeta('meta[name="robots"]', 'name', 'robots', route.noindex ? 'noindex, follow' : 'index, follow')
+
+    let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+    const canonicalOrigin = canonical ? new URL(canonical.href).origin : window.location.origin
+    if (!canonical) {
+      canonical = document.createElement('link')
+      canonical.rel = 'canonical'
+      document.head.append(canonical)
+    }
+    canonical.href = new URL(withBasePath(pathname), canonicalOrigin).href
+    setMeta('meta[property="og:url"]', 'property', 'og:url', canonical.href)
+  }, [pathname, route.description, route.noindex, route.title])
 
   const initialFocus = useRef(true)
   useEffect(() => {

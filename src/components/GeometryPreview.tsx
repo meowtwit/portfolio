@@ -7,7 +7,7 @@ export function GeometryPreview({ work, compact = false }: { work: Work; compact
 
   return (
     <div className={`geometry-preview mode-${mode}`} aria-hidden="true">
-      <svg viewBox="0 0 800 460" preserveAspectRatio="xMidYMid meet">
+      <svg width="800" height="460" viewBox="0 0 800 460" preserveAspectRatio="xMidYMid meet">
         <rect x="1" y="1" width="798" height="458" fill="none" stroke="currentColor" />
         {grid.map((value) => (
           <g key={value}>

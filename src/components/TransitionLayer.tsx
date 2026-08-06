@@ -133,7 +133,7 @@ function FanOccluder({ run }: { run: TransitionRun }) {
   }, [run.duration, run.id, run.startedAt])
 
   return (
-    <svg className="transition-fan">
+    <svg className="transition-fan" width="100%" height="100%" preserveAspectRatio="none">
       <path ref={blade} fill="#000" d="M0 0" />
       {Array.from({ length: RIBS }, (_, index) => (
         <line

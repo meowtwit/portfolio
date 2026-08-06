@@ -1,4 +1,5 @@
 import { createContext, forwardRef, useContext, type AnchorHTMLAttributes, type ReactNode } from 'react'
+import { stripBasePath, withBasePath } from './history'
 
 type Navigate = (path: string) => void
 
@@ -19,24 +20,30 @@ export const A = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorEl
   ref,
 ) {
   const navigate = useContext(NavigationContext)
+  const resolvedHref = (() => {
+    if (!href || href.startsWith('#')) return href
+    const url = new URL(href, window.location.href)
+    if (url.origin !== window.location.origin) return href
+    return withBasePath(`${url.pathname}${url.search}${url.hash}`)
+  })()
 
   return (
     <a
       ref={ref}
       {...props}
-      href={href}
+      href={resolvedHref}
       target={target}
       onClick={(event) => {
         onClick?.(event)
         if (
           event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey ||
-          event.shiftKey || event.altKey || target === '_blank' || !href || navigate === null
+          event.shiftKey || event.altKey || target === '_blank' || !resolvedHref || navigate === null
         ) return
 
-        const url = new URL(href, window.location.href)
+        const url = new URL(resolvedHref, window.location.href)
         if (url.origin !== window.location.origin) return
         event.preventDefault()
-        navigate(`${url.pathname}${url.search}${url.hash}`)
+        navigate(`${stripBasePath(url.pathname)}${url.search}${url.hash}`)
       }}
     />
   )

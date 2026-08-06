@@ -19,6 +19,8 @@ export interface Profile {
   links: readonly ProfileLink[]
 }
 
+export const CONTACT_FORM_EMAIL = 'PLACEHOLDER@example.com'
+
 export const profile: Profile = {
   name: '早雲 楓人',
   school: '神山まるごと高専',
@@ -32,7 +34,7 @@ export const profile: Profile = {
     { year: 'ONGOING', title: 'ダンス・表現', description: '身体のリズム、間、見せ方を、技術とは別の言葉で探る。' },
   ],
   links: [
-    { label: 'メール', href: 'mailto:hello@example.com', kind: 'contact', note: '制作・開発の相談' },
+    { label: 'メール', href: `mailto:${CONTACT_FORM_EMAIL}`, kind: 'contact', note: '制作・開発の相談' },
     { label: 'DM', href: '#', kind: 'contact', note: '短い質問や連絡' },
     { label: '面談・相談', href: '#', kind: 'contact', note: '30分のオンライン面談' },
     { label: 'GitHub', href: '#', kind: 'social' },

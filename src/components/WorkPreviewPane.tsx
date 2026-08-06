@@ -1,7 +1,15 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { Work } from '../data/works'
 import { A } from '../router/A'
+import { withBasePath } from '../router/history'
 import { GeometryPreview } from './GeometryPreview'
+
+function PreviewVisual({ work }: { work: Work }) {
+  if (work.coverImage) {
+    return <img className="preview-cover" src={withBasePath(work.coverImage)} alt={`${work.title}の制作画像`} />
+  }
+  return <GeometryPreview work={work} />
+}
 
 export function WorkPreviewPane({ work }: { work: Work }) {
   const latestWork = useRef(work)
@@ -33,8 +41,8 @@ export function WorkPreviewPane({ work }: { work: Work }) {
     <aside className="work-preview" aria-live="polite" aria-label={`${work.title}のプレビュー`}>
       <div className="work-preview__topline"><span>PREVIEW / {work.id}</span><span>{work.year}</span></div>
       <div className="preview-media-swap">
-        {outgoing && <div className="preview-media-swap__out"><GeometryPreview work={outgoing} /></div>}
-        <div key={work.id} data-transition-media className={outgoing ? 'preview-media-swap__in' : ''}><GeometryPreview work={work} /></div>
+        {outgoing && <div className="preview-media-swap__out"><PreviewVisual work={outgoing} /></div>}
+        <div key={work.id} data-transition-media className={outgoing ? 'preview-media-swap__in' : ''}><PreviewVisual work={work} /></div>
       </div>
       <div className="work-preview__heading">
         <p>{work.category}</p>

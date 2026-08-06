@@ -52,7 +52,7 @@ for (const slug of slugs) results.push(await capture(desktop, `desktop-detail-${
 
 const keyboardPage = await desktop.newPage()
 await keyboardPage.goto(`${baseURL}/works`, { waitUntil: 'networkidle' })
-for (let index = 0; index < 6; index += 1) await keyboardPage.keyboard.press('Tab')
+await keyboardPage.locator('.work-row').first().focus()
 const focusedBefore = await keyboardPage.evaluate(() => document.activeElement?.textContent?.trim())
 await keyboardPage.keyboard.press('ArrowDown')
 await keyboardPage.keyboard.press('ArrowDown')

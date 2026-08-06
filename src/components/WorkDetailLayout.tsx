@@ -2,10 +2,11 @@ import { useEffect } from 'react'
 import type { Work } from '../data/works'
 import { works } from '../data/works'
 import { A, useNavigate } from '../router/A'
+import { withBasePath } from '../router/history'
 import { GeometryPreview } from './GeometryPreview'
 
 function WorkMedia({ work }: { work: Work }) {
-  if (work.coverImage) return <img className="work-cover" data-transition-media src={work.coverImage} alt={`${work.title}の制作画像`} />
+  if (work.coverImage) return <img className="work-cover" data-transition-media src={withBasePath(work.coverImage)} alt={`${work.title}の制作画像`} />
   return (
     <div className="detail-geometry-media" data-transition-media role="img" aria-label={`${work.title}の幾何プレビュー`}>
       <GeometryPreview work={work} />

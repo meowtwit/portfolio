@@ -9,6 +9,20 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      (() => {
+        const storageKey = 'portfolio-spa-path'
+        let savedPath = null
+        try {
+          savedPath = sessionStorage.getItem(storageKey)
+          sessionStorage.removeItem(storageKey)
+        } catch {
+          return
+        }
+        if (!savedPath) return
+        if (savedPath.startsWith('/')) history.replaceState(null, '', savedPath)
+      })()
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

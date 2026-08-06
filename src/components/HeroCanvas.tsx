@@ -18,12 +18,15 @@ export function HeroCanvas() {
       frame = requestAnimationFrame(update)
     }
     update()
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
     window.addEventListener('scroll', requestUpdate, { passive: true })
     window.addEventListener('resize', requestUpdate)
+    motionPreference.addEventListener('change', requestUpdate)
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', requestUpdate)
       window.removeEventListener('resize', requestUpdate)
+      motionPreference.removeEventListener('change', requestUpdate)
     }
   }, [])
 
@@ -38,7 +41,7 @@ export function HeroCanvas() {
         </A>
       </div>
       <div className="hero-instrument" aria-hidden="true">
-        <svg viewBox="0 0 640 640">
+        <svg width="640" height="640" viewBox="0 0 640 640" preserveAspectRatio="xMidYMid meet">
           <rect x="80" y="80" width="480" height="480" fill="none" stroke="currentColor" />
           <circle cx="320" cy="320" r="180" fill="none" stroke="currentColor" strokeWidth="2" />
           <circle cx="320" cy="320" r="90" fill="none" stroke="currentColor" />
