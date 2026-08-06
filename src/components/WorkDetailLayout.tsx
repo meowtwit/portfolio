@@ -1,6 +1,7 @@
+import { useEffect } from 'react'
 import type { Work } from '../data/works'
 import { works } from '../data/works'
-import { A } from '../router/A'
+import { A, useNavigate } from '../router/A'
 import { GeometryPreview } from './GeometryPreview'
 
 function WorkMedia({ work }: { work: Work }) {
@@ -13,18 +14,31 @@ function WorkMedia({ work }: { work: Work }) {
 }
 
 export function WorkDetailLayout({ work }: { work: Work }) {
+  const navigate = useNavigate()
   const index = works.findIndex((item) => item.id === work.id)
   const previous = works[(index - 1 + works.length) % works.length]
   const next = works[(index + 1) % works.length]
 
+  useEffect(() => {
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== 'Escape' || event.defaultPrevented) return
+      const target = event.target as HTMLElement | null
+      if (target?.closest('input, textarea, select, [contenteditable="true"]')) return
+      event.preventDefault()
+      navigate('/works')
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [navigate])
+
   return (
     <main id="main" className="work-detail" tabIndex={-1}>
-      <div className="detail-breadcrumb"><A href="/works">作品一覧</A><span>/</span><span>{work.title}</span></div>
+      <nav className="detail-breadcrumb" aria-label="パンくず"><A href="/works">作品一覧</A><span>/</span><span>{work.title}</span></nav>
       <article>
         <header className="work-hero">
           <div className="work-hero__title">
             <p className="eyebrow"><span>{work.id}</span> WORK DETAIL</p>
-            <h1>{work.title}</h1>
+            <h1 tabIndex={-1}>{work.title}</h1>
             <p className="work-hero__claim">{work.shortDescription}</p>
           </div>
           <WorkMedia work={work} />

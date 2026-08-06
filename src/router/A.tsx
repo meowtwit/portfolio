@@ -8,6 +8,12 @@ export function NavigationProvider({ navigate, children }: { navigate: Navigate;
   return <NavigationContext.Provider value={navigate}>{children}</NavigationContext.Provider>
 }
 
+export function useNavigate(): Navigate {
+  const navigate = useContext(NavigationContext)
+  if (!navigate) throw new Error('useNavigate must be used inside NavigationProvider')
+  return navigate
+}
+
 export const A = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function A(
   { href, onClick, target, ...props },
   ref,

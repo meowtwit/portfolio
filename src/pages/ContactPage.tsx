@@ -8,7 +8,7 @@ export function ContactPage() {
     <main id="main" className="contact-page" tabIndex={-1}>
       <header className="page-heading contact-heading">
         <p className="eyebrow"><span>CONTACT</span> START A CONVERSATION</p>
-        <div><h1>連絡</h1><p>制作、開発、研究について。<br />目的に近い入口を一つ選んでください。</p></div>
+        <div><h1 tabIndex={-1}>連絡</h1><p>制作、開発、研究について。<br />目的に近い入口を一つ選んでください。</p></div>
       </header>
 
       <section className="contact-methods" aria-label="連絡方法">

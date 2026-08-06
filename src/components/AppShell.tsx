@@ -25,7 +25,13 @@ export function AppShell({
       <a className="skip-link" href="#main">本文へ移動</a>
       <GlobalNav pathname={pathname} />
       <div className="route-viewport">
-        <div key={routeKey} className={`route-stage${routeMotionClass(transition)}`}>{children}</div>
+        <div key={routeKey} className={`route-stage${routeMotionClass(transition)}`}>
+          {children}
+          <footer className="global-footer">
+            <span>早雲楓人 — PORTFOLIO</span>
+            <span>AI / SOFTWARE / PHYSICAL SYSTEMS</span>
+          </footer>
+        </div>
       </div>
       <TransitionLayer run={transition} />
     </div>

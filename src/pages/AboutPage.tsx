@@ -7,7 +7,7 @@ export function AboutPage() {
     <main id="main" className="about-page" tabIndex={-1}>
       <header className="page-heading about-heading">
         <p className="eyebrow"><span>ABOUT</span> PERSON / PRACTICE</p>
-        <div><h1>人物</h1><p>{profile.name}<br />{profile.school}</p></div>
+        <div><h1 tabIndex={-1}>人物</h1><p>{profile.name}<br />{profile.school}</p></div>
       </header>
 
       <section className="profile-intro" aria-labelledby="profile-title">

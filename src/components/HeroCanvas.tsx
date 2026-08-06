@@ -31,7 +31,7 @@ export function HeroCanvas() {
     <section ref={root} className="hero-canvas" aria-labelledby="hero-title">
       <div className="hero-copy">
         <p className="eyebrow"><span>01</span> STRUCTURE INTO MOTION</p>
-        <h1 id="hero-title">考えた仕組みを、<br />動くところまでつくる。</h1>
+        <h1 id="hero-title" tabIndex={-1}>考えた仕組みを、<br />動くところまでつくる。</h1>
         <p className="hero-fields">AI <i /> SOFTWARE <i /> PHYSICAL SYSTEMS</p>
         <A className="primary-cta" href="/works">
           <span>作品を見る</span><span aria-hidden="true">— 12</span>

@@ -175,6 +175,18 @@ export default function App() {
 
   useEffect(() => { document.title = route.title }, [route.title])
 
+  const initialFocus = useRef(true)
+  useEffect(() => {
+    if (initialFocus.current) {
+      initialFocus.current = false
+      return
+    }
+    const frame = requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('#main h1')?.focus({ preventScroll: true })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [displayedLocation.key])
+
   return (
     <NavigationProvider navigate={navigate}>
       <AppShell pathname={navigationPathname} routeKey={displayedLocation.key} transition={transition}>
