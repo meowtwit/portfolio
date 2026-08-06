@@ -1,18 +1,13 @@
 import type { Work } from '../data/works'
 import { works } from '../data/works'
 import { A } from '../router/A'
+import { GeometryPreview } from './GeometryPreview'
 
 function WorkMedia({ work }: { work: Work }) {
-  if (work.coverImage) return <img className="work-cover" src={work.coverImage} alt={`${work.title}の制作画像`} />
+  if (work.coverImage) return <img className="work-cover" data-transition-media src={work.coverImage} alt={`${work.title}の制作画像`} />
   return (
-    <div className="work-cover-placeholder" role="img" aria-label={`${work.title}の画像は準備中です`}>
-      <svg viewBox="0 0 1200 675" preserveAspectRatio="none" aria-hidden="true">
-        <rect x="1" y="1" width="1198" height="673" fill="none" stroke="currentColor" />
-        <line x1="1" y1="1" x2="1199" y2="674" stroke="currentColor" />
-        <line x1="1199" y1="1" x2="1" y2="674" stroke="currentColor" />
-        <path d="M0 44H42M44 0V42M1200 44H1158M1156 0V42M0 631H42M44 675V633M1200 631H1158M1156 675V633" stroke="currentColor" strokeWidth="3" />
-      </svg>
-      <span>NO IMAGE YET</span><small>MEDIA SLOT / {work.id}</small>
+    <div className="detail-geometry-media" data-transition-media role="img" aria-label={`${work.title}の幾何プレビュー`}>
+      <GeometryPreview work={work} />
     </div>
   )
 }

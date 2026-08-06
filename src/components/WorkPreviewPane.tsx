@@ -1,12 +1,41 @@
+import { useLayoutEffect, useRef, useState } from 'react'
 import type { Work } from '../data/works'
 import { A } from '../router/A'
 import { GeometryPreview } from './GeometryPreview'
 
 export function WorkPreviewPane({ work }: { work: Work }) {
+  const latestWork = useRef(work)
+  const clearTimer = useRef<number | null>(null)
+  const [outgoing, setOutgoing] = useState<Work | null>(null)
+
+  useLayoutEffect(() => {
+    if (latestWork.current.id === work.id) return
+    const previous = latestWork.current
+    latestWork.current = work
+
+    if (clearTimer.current !== null) window.clearTimeout(clearTimer.current)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setOutgoing(null)
+      return
+    }
+
+    setOutgoing(previous)
+    clearTimer.current = window.setTimeout(() => {
+      setOutgoing(null)
+      clearTimer.current = null
+    }, 145)
+    return () => {
+      if (clearTimer.current !== null) window.clearTimeout(clearTimer.current)
+    }
+  }, [work])
+
   return (
     <aside className="work-preview" aria-live="polite" aria-label={`${work.title}のプレビュー`}>
       <div className="work-preview__topline"><span>PREVIEW / {work.id}</span><span>{work.year}</span></div>
-      <GeometryPreview work={work} />
+      <div className="preview-media-swap">
+        {outgoing && <div className="preview-media-swap__out"><GeometryPreview work={outgoing} /></div>}
+        <div key={work.id} data-transition-media className={outgoing ? 'preview-media-swap__in' : ''}><GeometryPreview work={work} /></div>
+      </div>
       <div className="work-preview__heading">
         <p>{work.category}</p>
         <h2>{work.title}</h2>

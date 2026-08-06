@@ -3,8 +3,9 @@ import { works } from '../data/works'
 import { A } from '../router/A'
 import { WorkPreviewPane } from './WorkPreviewPane'
 
-export function WorksIndex() {
-  const [selectedIndex, setSelectedIndex] = useState(0)
+export function WorksIndex({ initialSlug }: { initialSlug?: string | null }) {
+  const initialIndex = Math.max(0, works.findIndex((work) => work.slug === initialSlug))
+  const [selectedIndex, setSelectedIndex] = useState(initialIndex)
   const rowRefs = useRef<Array<HTMLAnchorElement | null>>([])
   const selected = works[selectedIndex]
 
