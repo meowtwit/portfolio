@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties } from 'react'
+import { useEffect, useRef } from 'react'
 import { works } from '../data/works'
 import { A } from '../router/A'
 
@@ -10,6 +10,7 @@ export function IntroScenes() {
   useEffect(() => {
     let frame = 0
     const clamp = (value: number) => Math.max(0, Math.min(1, value))
+    const easeInOut = (value: number) => value * value * (3 - 2 * value)
     const sceneProgress = (element: HTMLElement) => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 1
       const rect = element.getBoundingClientRect()
@@ -23,13 +24,13 @@ export function IntroScenes() {
 
       if (breadth.current) {
         const progress = sceneProgress(breadth.current)
+        const convergence = easeInOut(clamp(progress / 0.48))
+        const maxGap = window.innerWidth <= 700
+          ? window.innerWidth * 0.18
+          : Math.max(160, window.innerWidth * 0.22)
+        const gap = maxGap * (1 - convergence) - convergence
         breadth.current.style.setProperty('--scene-progress', progress.toFixed(4))
-        breadth.current.querySelectorAll<HTMLElement>('.breadth-item').forEach((item, index) => {
-          const itemProgress = clamp((progress - index * 0.05) / 0.28)
-          item.style.setProperty('--item-progress', Math.max(0.04, itemProgress).toFixed(4))
-          item.style.setProperty('--item-shift', `${((1 - itemProgress) * 44).toFixed(2)}px`)
-          item.style.setProperty('--item-mobile-shift', `${((1 - itemProgress) * -24).toFixed(2)}px`)
-        })
+        breadth.current.style.setProperty('--breadth-gap', `${gap.toFixed(2)}px`)
       }
 
       if (exit.current) {
@@ -94,15 +95,10 @@ export function IntroScenes() {
         <header className="scene-header"><span>SCENE 03</span><h2 id="breadth-title">活動の幅</h2><p>技術だけではなく、誰と・どこで・どう作るか。</p></header>
         <div className="breadth-axis" aria-label="活動領域">
           {['神山まるごと高専', 'AI開発', '共同創業', 'ロボティクス', 'ダンス・表現'].map((item, index) => (
-            <div
-              key={item}
-              className="breadth-item"
-              style={{ '--item-rest': index % 2 ? '28px' : '0px' } as CSSProperties}
-            >
+            <div key={item} className="breadth-item">
               <span>{String(index + 1).padStart(2, '0')}</span><strong>{item}</strong>
             </div>
           ))}
-          <div className="breadth-core" aria-hidden="true"><i /><i /></div>
         </div>
         <A className="text-link" href="/about">人物と経歴を詳しく見る <span>→</span></A>
       </section>
