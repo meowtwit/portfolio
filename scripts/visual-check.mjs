@@ -1,5 +1,5 @@
 import { chromium } from '/Users/huuto/data/projects/portfolio_mono/node_modules/playwright/index.mjs'
-import { mkdir, stat } from 'node:fs/promises'
+import { mkdir, readFile, stat } from 'node:fs/promises'
 import path from 'node:path'
 
 const baseURL = 'http://portfolio.local'
@@ -11,6 +11,30 @@ const chrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 const browser = await chromium.launch({ headless: true, executablePath: chrome })
 const errors = []
 const results = []
+const allSlugs = [
+  'tsukuyomi', 'aiment', 'quoridor-ai', 'linegraphify', 'preference-fractal', 'tsubooji',
+  'bird-tracking', 'board-game-ai', 'evolving-car', 'tetris-explosion', 'cooking-ai-league',
+  'fruit-merge-rl', 'ai-secretary', 'ai-paper-trader', 'vowel-viz', 'tracking-cat',
+  'fairy-assistant', 'site-blocker',
+]
+const expectedCoverImages = {
+  'tsukuyomi': '/works/tsukuyomi-versus.png',
+  'aiment': '/works/aiment-lp.png',
+  'linegraphify': '/works/linegraphify-okinami.png',
+  'preference-fractal': '/works/fractal-phoenix.png',
+  'board-game-ai': '/works/board-game-ai.png',
+  'tetris-explosion': '/works/explosion-burst.jpg',
+  'ai-secretary': '/works/ai-secretary-claude.png',
+  'ai-paper-trader': '/works/ai-paper-trader.png',
+  'vowel-viz': '/works/voiceai-ui.png',
+  'tracking-cat': '/works/tracking-cat2.gif',
+  'fairy-assistant': '/works/fairy.gif',
+  'site-blocker': '/works/site-blocker-code.png',
+}
+const requiredDetailSlugs = [
+  'tsukuyomi', 'aiment', 'board-game-ai', 'ai-paper-trader', 'site-blocker', 'ai-secretary',
+  'fairy-assistant',
+]
 
 async function existingFile(candidate) {
   try {
@@ -57,6 +81,113 @@ async function capture(context, name, route, fullPage = true) {
   return page
 }
 
+async function checkDetailCover(page, name, slug) {
+  const expectedSrc = expectedCoverImages[slug]
+  if (!expectedSrc) return
+  const coverImage = page.locator('.work-cover')
+  await coverImage.waitFor({ state: 'visible' })
+  await coverImage.evaluate((image) => image.complete || new Promise((resolve) => image.addEventListener('load', resolve, { once: true })))
+  const cover = await coverImage.evaluate((image) => {
+    const imageRect = image.getBoundingClientRect()
+    const parentRect = image.closest('.work-hero')?.getBoundingClientRect()
+    return {
+      tag: image.tagName,
+      src: image.getAttribute('src'),
+      loaded: image.complete && image.naturalWidth > 0 && image.naturalHeight > 0,
+      objectFit: getComputedStyle(image).objectFit,
+      overflow: parentRect ? {
+        top: Math.max(0, parentRect.top - imageRect.top),
+        right: Math.max(0, imageRect.right - parentRect.right),
+        bottom: Math.max(0, imageRect.bottom - parentRect.bottom),
+        left: Math.max(0, parentRect.left - imageRect.left),
+      } : null,
+    }
+  })
+  if (cover.tag !== 'IMG' || !cover.loaded || !cover.src?.endsWith(expectedSrc) || cover.objectFit !== 'contain') {
+    errors.push(`${name}: invalid cover ${JSON.stringify(cover)}`)
+  }
+  if (slug === 'fairy-assistant' && (!cover.overflow || Object.values(cover.overflow).some((value) => value > 0.5))) {
+    errors.push(`${name}: fairy cover escapes hero ${JSON.stringify(cover.overflow)}`)
+  }
+  results.push({ [`${name}-cover`]: cover })
+}
+
+async function checkDetailContent(page, name, slug) {
+  if (slug === 'aiment') {
+    const links = await page.locator('.work-links a').evaluateAll((anchors) => anchors.map((anchor) => ({
+      label: anchor.textContent?.replace(/\s*↗\s*$/, '').trim(),
+      href: anchor.getAttribute('href'),
+    })))
+    if (JSON.stringify(links) !== JSON.stringify([{ label: 'aiment.jp/lp', href: 'https://aiment.jp/lp' }])) {
+      errors.push(`${name}: invalid Aiment links ${JSON.stringify(links)}`)
+    }
+    results.push({ [`${name}-links`]: links })
+  }
+  if (slug === 'cooking-ai-league') {
+    const title = await page.locator('.work-hero__title h1').textContent()
+    if (title?.trim() !== 'はじめてのおつかい' || !((await page.title()).startsWith('はじめてのおつかい —'))) {
+      errors.push(`${name}: title not updated (${JSON.stringify({ heading: title, documentTitle: await page.title() })})`)
+    }
+  }
+}
+
+async function checkAllWorkPreviews(context, viewportName) {
+  const page = await context.newPage()
+  await page.goto(`${baseURL}/works`, { waitUntil: 'networkidle' })
+  const previewChecks = []
+  const rows = page.locator('.work-row')
+  if (await rows.count() !== allSlugs.length) errors.push(`${viewportName}-previews: expected ${allSlugs.length} rows`)
+
+  for (let index = 0; index < allSlugs.length; index += 1) {
+    const slug = allSlugs[index]
+    const row = rows.nth(index)
+    await row.focus()
+    await page.waitForTimeout(170)
+    const media = page.locator('.preview-media-swap > div:last-child > *')
+    await media.waitFor({ state: 'visible' })
+    if (await media.evaluate((element) => element.tagName === 'IMG')) {
+      await media.evaluate((image) => image.complete || new Promise((resolve) => image.addEventListener('load', resolve, { once: true })))
+    }
+    const state = await media.evaluate((element) => {
+      const mediaRect = element.getBoundingClientRect()
+      const frameRect = element.closest('.preview-media-swap')?.getBoundingClientRect()
+      return {
+        tag: element.tagName,
+        src: element.getAttribute('src'),
+        loaded: element.tagName !== 'IMG' || (element.complete && element.naturalWidth > 0 && element.naturalHeight > 0),
+        objectFit: getComputedStyle(element).objectFit,
+        horizontalOverflow: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+        frameOverflow: frameRect ? {
+          top: Math.max(0, frameRect.top - mediaRect.top),
+          right: Math.max(0, mediaRect.right - frameRect.right),
+          bottom: Math.max(0, mediaRect.bottom - frameRect.bottom),
+          left: Math.max(0, frameRect.left - mediaRect.left),
+        } : null,
+      }
+    })
+    const expectedSrc = expectedCoverImages[slug]
+    if (state.horizontalOverflow > 1) errors.push(`${viewportName}-preview-${slug}: horizontal overflow ${state.horizontalOverflow}px`)
+    if (expectedSrc && (state.tag !== 'IMG' || !state.loaded || !state.src?.endsWith(expectedSrc) || state.objectFit !== 'contain')) {
+      errors.push(`${viewportName}-preview-${slug}: invalid cover ${JSON.stringify(state)}`)
+    }
+    if (!expectedSrc && state.tag !== 'DIV') errors.push(`${viewportName}-preview-${slug}: missing work plate`)
+    if (slug === 'fairy-assistant' && (!state.frameOverflow || Object.values(state.frameOverflow).some((value) => value > 0.5))) {
+      errors.push(`${viewportName}-preview-${slug}: fairy cover escapes frame ${JSON.stringify(state.frameOverflow)}`)
+    }
+    previewChecks.push({ slug, ...state })
+  }
+
+  results.push({ [`${viewportName}AllPreviews`]: previewChecks })
+  await page.close()
+}
+
+const cookingPrerender = await readFile(path.join(dist, 'works/cooking-ai-league/index.html'), 'utf8')
+const cookingPrerenderTitle = cookingPrerender.match(/<title>(.*?)<\/title>/)?.[1]
+if (cookingPrerenderTitle !== 'はじめてのおつかい — 早雲楓人') {
+  errors.push(`prerender cooking-ai-league: wrong title ${JSON.stringify(cookingPrerenderTitle)}`)
+}
+results.push({ cookingPrerenderTitle })
+
 const desktop = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 })
 await installStaticRoute(desktop)
 const desktopRoutes = [
@@ -72,26 +203,10 @@ for (const [name, route] of desktopRoutes) {
   await page.close()
 }
 
-const newSlugs = ['cooking-ai-league', 'fruit-merge-rl', 'ai-secretary', 'ai-paper-trader', 'vowel-viz', 'tracking-cat', 'fairy-assistant', 'site-blocker']
-const slugs = ['aiment', 'quoridor-ai', 'linegraphify', 'preference-fractal', 'tsubooji', 'bird-tracking', 'board-game-ai', 'evolving-car', 'tetris-explosion', ...newSlugs]
-const expectedCoverImages = {
-  'vowel-viz': '/works/voiceai-ui.png',
-  'tracking-cat': '/works/tracking-cat.gif',
-  'fairy-assistant': '/works/fairy.gif',
-}
-for (const slug of slugs) {
+for (const slug of allSlugs) {
   const page = await capture(desktop, `desktop-detail-${slug}`, `/works/${slug}`, false)
-  if (expectedCoverImages[slug]) {
-    const cover = await page.locator('.work-cover').evaluate((image) => ({
-      tag: image.tagName,
-      src: image.getAttribute('src'),
-      loaded: image.complete && image.naturalWidth > 0 && image.naturalHeight > 0,
-    }))
-    if (cover.tag !== 'IMG' || !cover.loaded || !cover.src?.endsWith(expectedCoverImages[slug])) {
-      errors.push(`desktop-detail-${slug}: invalid cover ${JSON.stringify(cover)}`)
-    }
-    results.push({ [`desktop-detail-${slug}-cover`]: cover })
-  }
+  await checkDetailCover(page, `desktop-detail-${slug}`, slug)
+  await checkDetailContent(page, `desktop-detail-${slug}`, slug)
   await page.close()
 }
 
@@ -111,7 +226,7 @@ const filterPage = await desktop.newPage()
 await filterPage.goto(`${baseURL}/works`, { waitUntil: 'networkidle' })
 const chipLabels = await filterPage.locator('.work-filter-chip').allTextContents()
 const expectedFilters = {
-  'すべて': ['tsukuyomi', 'aiment', 'quoridor-ai', 'linegraphify', 'preference-fractal', 'tsubooji', 'bird-tracking', 'board-game-ai', 'evolving-car', 'tetris-explosion', ...newSlugs],
+  'すべて': allSlugs,
   'AI・学習': ['tsukuyomi', 'quoridor-ai', 'preference-fractal', 'tsubooji', 'board-game-ai', 'evolving-car', 'cooking-ai-league', 'fruit-merge-rl'],
   'プロダクト・ツール': ['aiment', 'linegraphify', 'ai-secretary', 'ai-paper-trader', 'site-blocker'],
   '表現・身体': ['bird-tracking', 'tetris-explosion', 'vowel-viz', 'tracking-cat', 'fairy-assistant'],
@@ -125,23 +240,8 @@ for (const [label, expected] of Object.entries(expectedFilters)) {
   if (JSON.stringify(actual) !== JSON.stringify(expected)) errors.push(`works-filter ${label}: ${JSON.stringify(actual)}`)
 }
 results.push({ filters: chipLabels })
-await filterPage.getByRole('button', { name: 'すべて', exact: true }).click()
-for (const [slug, expectedSrc] of Object.entries(expectedCoverImages)) {
-  await filterPage.locator(`.work-row[href$="/${slug}"]`).hover()
-  const coverImage = filterPage.locator('.preview-media-swap > div:last-child .preview-cover')
-  await coverImage.waitFor({ state: 'visible' })
-  await coverImage.evaluate((image) => image.complete || new Promise((resolve) => image.addEventListener('load', resolve, { once: true })))
-  const cover = await coverImage.evaluate((image) => ({
-    tag: image.tagName,
-    src: image.getAttribute('src'),
-    loaded: image.complete && image.naturalWidth > 0 && image.naturalHeight > 0,
-  }))
-  if (cover.tag !== 'IMG' || !cover.loaded || !cover.src?.endsWith(expectedSrc)) {
-    errors.push(`works-preview-${slug}: invalid cover ${JSON.stringify(cover)}`)
-  }
-  results.push({ [`works-preview-${slug}-cover`]: cover })
-}
 await filterPage.close()
+await checkAllWorkPreviews(desktop, 'desktop')
 
 const progressPage = await desktop.newPage()
 await progressPage.goto(`${baseURL}/`, { waitUntil: 'networkidle' })
@@ -162,19 +262,23 @@ await desktop.close()
 
 const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 })
 await installStaticRoute(mobile)
+const mobileDetailSlugs = [...new Set(['linegraphify', 'cooking-ai-league', ...requiredDetailSlugs])]
 const mobileRoutes = [
   ['mobile-home', '/'],
   ['mobile-works', '/works'],
-  ['mobile-detail', '/works/tsukuyomi'],
-  ['mobile-linegraphify', '/works/linegraphify'],
-  ...newSlugs.map((slug) => [`mobile-detail-${slug}`, `/works/${slug}`]),
+  ...mobileDetailSlugs.map((slug) => [`mobile-detail-${slug}`, `/works/${slug}`]),
   ['mobile-about', '/about'],
   ['mobile-contact', '/contact'],
   ['mobile-404', '/missing-page'],
 ]
 for (const [name, route] of mobileRoutes) {
   const page = await capture(mobile, name, route, true)
-  if (name === 'mobile-linegraphify') {
+  const detailSlug = route.startsWith('/works/') ? route.split('/').pop() : null
+  if (detailSlug) {
+    await checkDetailCover(page, name, detailSlug)
+    await checkDetailContent(page, name, detailSlug)
+  }
+  if (detailSlug === 'linegraphify') {
     const overlap = await page.evaluate(() => {
       const title = document.querySelector('.work-hero__title h1')?.getBoundingClientRect()
       const claim = document.querySelector('.work-hero__claim')?.getBoundingClientRect()
@@ -186,6 +290,7 @@ for (const [name, route] of mobileRoutes) {
   }
   await page.close()
 }
+await checkAllWorkPreviews(mobile, 'mobile')
 await mobile.close()
 await browser.close()
 

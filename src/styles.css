@@ -182,7 +182,8 @@ img, svg { display: block; max-width: 100%; }
 }
 .transition-shared-frame > * { width: 100% !important; height: 100% !important; }
 .transition-shared-frame .work-plate { width: 100%; height: 100%; }
-.transition-shared-frame .preview-cover { width: 100%; height: 100%; }
+.transition-shared-frame .preview-cover,
+.transition-shared-frame .work-cover { width: 100%; height: 100%; max-height: none; }
 [data-transition-media].is-transition-target { visibility: hidden; }
 
 .eyebrow, .section-kicker {
@@ -347,7 +348,7 @@ img, svg { display: block; max-width: 100%; }
 
 .work-preview { position: -webkit-sticky; position: sticky; top: calc(var(--nav-height) + 28px); border: 2px solid #000; padding: 15px; }
 .work-preview__topline { display: flex; justify-content: space-between; margin-bottom: 13px; font: 10px var(--mono); letter-spacing: .08em; }
-.preview-cover { display: block; width: 100%; aspect-ratio: 800 / 460; border: 1px solid #000; object-fit: cover; }
+.preview-cover { display: block; width: 100%; max-width: 100%; max-height: 460px; aspect-ratio: 800 / 460; border: 1px solid #000; background: #fff; object-fit: contain; }
 .work-plate { container-type: inline-size; display: grid; grid-template-rows: auto 1fr auto; width: 100%; aspect-ratio: 800 / 460; border: 1px solid #000; color: #000; background: #fff; }
 .work-plate__top, .work-plate__bottom { display: flex; justify-content: space-between; gap: 20px; padding: clamp(9px, 2.8cqi, 22px); font: clamp(8px, 1.8cqi, 13px)/1.4 var(--mono); letter-spacing: .08em; }
 .work-plate__top { border-bottom: 1px solid #000; }
@@ -382,7 +383,7 @@ img, svg { display: block; max-width: 100%; }
 .work-hero__title h1 { min-width: 0; margin: 0; font-size: clamp(58px, 9vw, 138px); line-height: .88; letter-spacing: -.07em; overflow-wrap: anywhere; }
 .work-hero__title h1.is-long-title { font-size: clamp(48px, 6.4vw, 96px); letter-spacing: -.055em; }
 .work-hero__claim { margin: 0; padding-bottom: 6px; font-size: clamp(20px, 2.1vw, 31px); font-weight: 700; line-height: 1.7; }
-.work-cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.work-cover { display: block; width: 100%; max-width: 100%; max-height: 760px; aspect-ratio: 16/9; border: 1px solid #000; background: #fff; object-fit: contain; }
 .detail-plate-media { width: 100%; background: #fff; }
 .work-meta { display: grid; grid-template-columns: 120px 180px 1fr; margin-top: 16px; border: 1px solid #000; }
 .work-meta span { min-height: 48px; display: flex; align-items: center; padding: 10px 16px; border-right: 1px solid #000; font: 11px/1.5 var(--mono); }

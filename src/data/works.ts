@@ -54,6 +54,7 @@ export const works: readonly Work[] = [
     shortDescription: '盤面状況をCNNで読み、戦略と探索パラメータを動的に切り替えて対AI戦の最強を目指すTetris AI。',
     role: '探索設計 / C++実装 / 計測・評価',
     tech: ['C++23', 'Beam Search', 'CNN', 'Virtual Gamepad'],
+    coverImage: '/works/tsukuyomi-versus.png',
     sections: [
       chapter('overview', '概要', '盤面を読み、数十手先を考え、一手をゲームへ返す。', [
         '10×40の盤面から候補手を生成し、対戦中の一フレーム内で探索から入力までを完結させるTetris AIです。主なターゲットはAIで、対AI戦で最強になることを目指しています。市販ゲームを仮想ゲームパッドで操作し、対人戦にも対応します。',
@@ -86,6 +87,7 @@ export const works: readonly Work[] = [
     shortDescription: '視聴者が配信に介入できる、VTuberのための双方向ライブ配信プロダクト。',
     role: '共同創業 / プロダクト設計 / フルスタック開発',
     tech: ['TypeScript', 'Next.js', 'WebRTC', 'Cloudflare'],
+    coverImage: '/works/aiment-lp.png',
     sections: [
       chapter('overview', '概要', '配信を見る人を、配信に参加する人へ変える。', [
         '視聴者の反応や選択を配信へリアルタイムに返し、VTuberと視聴者が同じ場を作れる参加型ライブ配信プロダクトです。フィリピンで創業し、企画・実装・公開後の運用まで続けています。',
@@ -106,12 +108,13 @@ export const works: readonly Work[] = [
         'インドネシアでの利用を通して、配信者が継続しやすく、視聴者が何度でも参加したくなる企画と運用の形を磨きます。',
       ]),
     ],
-    links: [],
+    links: [{ label: 'aiment.jp/lp', href: 'https://aiment.jp/lp' }],
   },
   {
     id: '03', slug: 'quoridor-ai', title: 'コリドールAI', year: 2026, category: 'Game AI', group: 'AI・学習',
     shortDescription: '複数の思考エンジンを差し替え、経路と壁の一手を比較するボードゲームAI。',
     role: 'アルゴリズム設計 / C++実装 / 対戦評価', tech: ['C++20', 'MCTS', 'Beam Search'],
+    coverImage: '/works/quoridor-gui.png',
     sections: [
       chapter('overview', '概要', '壁を置いても道が残る。その条件の中で最善手を探す。', ['9×9盤面のマスと、その隙間に置かれる壁を別の構造として扱うコリドールAIです。複数の思考方式を同じ対戦基盤で比較できます。'], ['BOARD 9×9', 'WALLS 10 / PLAYER']),
       chapter('role', '自分の担当', 'ルール実装から探索器、評価基盤まで。', ['合法手生成、経路存在判定、最短経路、ビームサーチとMCTSの実装を担当しました。']),
@@ -125,7 +128,7 @@ export const works: readonly Work[] = [
     id: '04', slug: 'linegraphify', title: 'LineGraphify', year: 2025, category: 'Visualization', group: 'プロダクト・ツール',
     shortDescription: '画像や動画の輪郭と塗りを抽出し、数万本の数式へ翻訳する変換システム。',
     role: '画像処理設計 / Python実装 / 可視化', tech: ['Python', 'OpenCV', 'FFmpeg', 'Douglas–Peucker'],
-    coverImage: '/works/linegraphify-mickey.png',
+    coverImage: '/works/linegraphify-okinami.png',
     sections: [
       chapter('overview', '概要', '画像を、描画可能な数式の集合へ変える。', ['1200×800の画像から輪郭と塗り領域を抽出し、式数の上限内で再構成します。'], ['497 CONTOURS', '41,385 SEGMENTS']),
       chapter('role', '自分の担当', '変換パイプラインと配分ロジックを設計。', ['輪郭抽出、単純化、領域分類、数式への変換と出力までを実装しました。']),
@@ -139,7 +142,7 @@ export const works: readonly Work[] = [
     id: '05', slug: 'preference-fractal', title: '選好学習フラクタル', year: 2026, category: 'Research', group: 'AI・学習',
     shortDescription: '二択を繰り返すだけで、生成結果が使う人の好みへ近づく選好学習実験。',
     role: '研究設計 / PyTorch実装 / 実験', tech: ['PyTorch', 'Bradley–Terry', 'Generative Art'],
-    coverImage: '/works/fractal-octopus.png',
+    coverImage: '/works/fractal-phoenix.png',
     sections: [
       chapter('overview', '概要', '言葉にしにくい好みを、左右の選択から学ぶ。', ['2枚から好みを選ぶ行為を学習信号にし、5種のフラクタル生成パラメータへ反映します。']),
       chapter('role', '自分の担当', '生成・比較・学習のループを一人で設計。', ['UI、データ保存、Bradley–Terry型の選好モデル、生成器との接続を実装しました。']),
@@ -153,6 +156,7 @@ export const works: readonly Work[] = [
     id: '06', slug: 'tsubooji', title: '壺の強化学習', year: 2026, category: 'RL', group: 'AI・学習',
     shortDescription: 'ハンマー一本で登る挙動を、物理環境と報酬設計から学ばせる強化学習。',
     role: '環境構築 / 報酬設計 / PPO学習', tech: ['Python', 'PPO', 'Physics Simulation'],
+    coverImage: '/works/tsubooji.png',
     sections: [
       chapter('overview', '概要', '壺とハンマーの10次元を観測し、3つの行動で登る。', ['壺のおじさんがハンマー一本で登っていく、あの棒ゲーム風の自作環境で、何もしない・左回転・右回転を選び、100万stepの学習で高さを伸ばすエージェントです。'], ['OBSERVATION 10D', 'ACTION 3']),
       chapter('role', '自分の担当', 'ゲーム物理、Gym環境、報酬と学習を構築。', ['壺とハンマーの状態取得、終了条件、学習ログ、チェックポイント保存まで実装しました。']),
@@ -166,6 +170,7 @@ export const works: readonly Work[] = [
     id: '07', slug: 'bird-tracking', title: '羽ばたきトラッキング', year: 2025, category: 'Robotics', group: '表現・身体',
     shortDescription: '腕の上下を6点の骨格から読み、画面の鳥の羽ばたきへ変換する体験。',
     role: '体験設計 / 姿勢推定 / フロントエンド', tech: ['TypeScript', 'MediaPipe', 'Canvas'],
+    coverImage: '/works/bird-tracking.png',
     sections: [
       chapter('overview', '概要', '腕を振ると、画面の中の鳥が上がる。', ['左右の肩・肘・手首の6点を結び、手首の高さが閾値を横切るたびに一羽ばたきとして数えます。'], ['LANDMARKS 11–16', 'MODEL 5.78MB']),
       chapter('role', '自分の担当', '身体入力と画面応答の設計・実装。', ['Pose Landmarkerの組み込み、判定、描画、カメラ権限まわりを担当しました。']),
@@ -179,6 +184,7 @@ export const works: readonly Work[] = [
     id: '08', slug: 'board-game-ai', title: 'ボードゲームAI', year: 2025, category: 'Game AI', group: 'AI・学習',
     shortDescription: '友人が考案した5×5のボードゲームに、対戦AIとブラウザで遊べる環境を実装。',
     role: 'AI実装 / C++実装 / WebAssembly移植', tech: ['C++', 'Expectimax', 'WebAssembly'],
+    coverImage: '/works/board-game-ai.png',
     sections: [
       chapter('overview', '概要', '友人が作ったゲームへ、対戦する頭脳を実装する。', ['友人が考案・制作した5×5のボードゲームに対し、対戦AIとWeb移植を制作しました。おはじき24個とタイル24枚からなる盤面を探索可能な状態へ落とし込みます。']),
       chapter('role', '自分の担当', 'AI実装と検証、WebAssembly移植を担当。', ['既存ルールを探索用の状態表現へ変換し、序盤最大75合法手を扱うAIを実装しました。C++版とJS版は2万局でビット単位照合しています。']),
@@ -192,6 +198,7 @@ export const works: readonly Work[] = [
     id: '09', slug: 'evolving-car', title: '進化する自動運転', year: 2025, category: 'ML', group: 'AI・学習',
     shortDescription: '5本の距離レイを入力とするニューラルネットワークを進化させ、層構成ごとの走行方策を比較。',
     role: 'シミュレーション / 進化的学習 / 比較実験', tech: ['Python', 'Genetic Algorithm', 'Neural Network'],
+    coverImage: '/works/evolving-car.png',
     sections: [
       chapter('overview', '概要', '5つの距離入力から、操舵方策の重みを進化させる。', ['車体前方の-60° / -25° / 0° / +25° / +60°へ長さ150pxのレイを飛ばし、壁までの正規化距離をニューラルネットワークへ入力します。左右の広い視野で急カーブを先読みし、中心寄りの3本で直近の進行方向を細かく捉える設計です。']),
       chapter('role', '自分の担当', '車両モデル、進化ループ、層構成の比較系を実装。', ['1層H1=8と、2層H1=10・H2=6のネットワークを同じ車両条件とコースで走らせ、世代ブロックごとの到達率を比較しました。']),
@@ -216,22 +223,23 @@ export const works: readonly Work[] = [
     ], links: [],
   },
   {
-    id: '11', slug: 'cooking-ai-league', title: '料理バトルAIリーグ', year: 2025, category: 'AI League', group: 'AI・学習',
-    shortDescription: '食材を取り合う自作環境で、5種の学習器を育て、同じリーグ戦で強さを比較。',
-    role: '環境設計 / 5種の学習器実装 / リーグ評価', tech: ['Python', 'CEM', 'GA', 'REINFORCE', 'Q-Learning'],
+    id: '11', slug: 'cooking-ai-league', title: 'はじめてのおつかい', year: 2025, category: 'Digital Twin', group: 'AI・学習',
+    shortDescription: '体育の授業で自作した競技をデジタルツイン化し、5種のAIでメタ戦法を探してルール調整へ還元。',
+    role: '競技設計 / 環境設計 / 5種の学習器実装 / リーグ評価', tech: ['Python', 'CEM', 'GA', 'REINFORCE', 'Q-Learning'],
     sections: [
-      chapter('overview', '概要', '食材を取り、レシピを作り、5種のAIを同じリーグで戦わせる。', ['スーパーで食材を取り合い、完成したレシピの得点を競う自作環境です。食材7種・行動8種・レシピ6種を使い、全レシピの組合せはDFSで厳密に全探索します。最高得点のレシピはスペシャルカレーの12点で、余った食材は1個につき-2点です。'], ['7 INGREDIENTS / 8 ACTIONS', '6 RECIPES / STOCK 56']),
-      chapter('role', '自分の担当', '競技環境から5種の学習器、評価と可視化までを実装。', ['環境設計、CEM・GA・REINFORCE・Q学習・自己符号化NNの実装、学習済みモデルの保存、リーグ評価を担当しました。pygameでは1600×960の棚とレジ行列を描画でき、cooking_ai.pyは1,351行です。'], ['5 LEARNERS', 'PYGAME 1600×960', '1,351 LINES']),
-      chapter('background', '背景・課題', '異なる学習法を、同じ観測と行動の土俵で比べる。', ['方策は全AIで共通の線形softmaxとし、29次元の特徴量から8行動を選ぶ232重みに統一しました。自己符号化NNだけは14→64→14の表現と512パラメータのヘッドを持ち、合計2,382パラメータです。'], ['FEATURES 29 × ACTIONS 8', '232 WEIGHTS', 'NN 2,382 PARAMETERS']),
+      chapter('overview', '概要', '体育の授業で作った競技を、AIが先に何度も試すデジタルツインへ。', ['「はじめてのおつかい」は、体育の授業で自作した、スーパーを模したフィールドで食材を取り合い、完成したレシピの得点を競う競技です。人間の大会前に支配的な戦法を見つけてルールを調整するため、競技をデジタルツイン化し、5種のAIが戦うリーグを構築しました。食材7種・行動8種・レシピ6種を使い、全レシピの組合せはDFSで厳密に全探索します。最高得点のレシピはスペシャルカレーの12点で、余った食材は1個につき-2点です。'], ['7 INGREDIENTS / 8 ACTIONS', '6 RECIPES / STOCK 56']),
+      chapter('role', '自分の担当', '競技そのものの設計から、5種の学習器、評価と可視化までを担当。', ['体育の授業で行う競技の設計に加え、シミュレーション環境、CEM・GA・REINFORCE・Q学習・自己符号化NNの実装、学習済みモデルの保存、リーグ評価を担当しました。pygameでは1600×960の棚とレジ行列を描画でき、cooking_ai.pyは1,351行です。'], ['5 LEARNERS', 'PYGAME 1600×960', '1,351 LINES']),
+      chapter('background', '背景・課題', '一つの強すぎる戦法が、人間の競技を始める前に壊してしまう。', ['特定の戦法だけで勝てる状態になると、選択肢が形骸化し、競技としての面白さが失われます。そこで人間の大会を開く前にAI同士で試合を重ね、支配的なメタ戦法を発見してルールを調整するシミュレーションが必要でした。比較条件をそろえるため、方策は全AIで共通の線形softmaxとし、29次元の特徴量から8行動を選ぶ232重みに統一しました。自己符号化NNだけは14→64→14の表現と512パラメータのヘッドを持ち、合計2,382パラメータです。'], ['FEATURES 29 × ACTIONS 8', '232 WEIGHTS', 'NN 2,382 PARAMETERS']),
       chapter('implementation', '実装・工夫', '行動時間とレジ待ちを進め、世代を跨いで自己対戦する。', ['次に手が空いたチームが行動するイベント駆動型とし、1サイクルの時間は切断正規分布N(30,5)秒に、3台のレジでuniform(5,10)秒のサービスを受ける待ち時間を加えました。学習済みモデルはJSON形式の.cookaiファイルで保存し、次の学習では17個のモデルファイルを対戦相手プールへ自動ロードします。適合度は平均スコア − 5.0×(平均順位−1)で、得点と順位の両方を評価します。'], ['N(30,5) sec + REGISTER QUEUE', '3 REGISTERS / uniform(5,10) sec', '17 .cookai MODELS']),
-      chapter('result', '結果・到達点', '10,000戦で、REINFORCEが平均10.76点の首位になった。', ['CEMはpop300×100iter、GAはpop200×200iter、REINFORCEは60,000エピソード、Q学習は80,000エピソードを学習しました。リーグ戦ではREINFORCEが1位34.4%・2位47.3%で上位2着81.7%。平均得点はREINFORCE 10.76、CEM 9.14、NN 6.47、Q学習 6.07、GA 5.95でした。'], ['LEAGUE 10,000 EPISODES', 'REINFORCE 10.76 / TOP-2 81.7%', 'CEM 9.14 / NN 6.47 / Q 6.07 / GA 5.95']),
-      chapter('next', '現在の課題', 'Q学習をTD学習として組み直し、再びリーグで比べる。', ['現在のQ学習は遷移を使わない簡略実装で、TD学習として成立していません。下位に留まった要因を切り分けるため、ステップ単位の学習ログを完成させ、Q学習を修正して再リーグ戦を行います。']),
+      chapter('result', '結果・到達点', '10,000戦で、REINFORCEが平均10.76点の首位になった。', ['CEMはpop300×100iter、GAはpop200×200iter、REINFORCEは60,000エピソード、Q学習は80,000エピソードを学習しました。リーグ戦ではREINFORCEが1位34.4%・2位47.3%で上位2着81.7%。平均得点はREINFORCE 10.76、CEM 9.14、NN 6.47、Q学習 6.07、GA 5.95でした。特定AIが突出する戦法の傾向を観察し、競技ルールを調整する材料にできます。'], ['LEAGUE 10,000 EPISODES', 'REINFORCE 10.76 / TOP-2 81.7%', 'CEM 9.14 / NN 6.47 / Q 6.07 / GA 5.95']),
+      chapter('next', '現在の課題', '学習器を直し、発見したメタをルールへ還元するループを回す。', ['現在のQ学習は遷移を使わない簡略実装で、TD学習として成立していません。下位に留まった要因を切り分けるため、ステップ単位の学習ログを完成させ、Q学習を修正して再リーグ戦を行います。その結果から見つけたメタ戦法を競技ルールへ還元し、調整後のルールを再びAIリーグで検証するループへつなげます。']),
     ], links: [],
   },
   {
     id: '12', slug: 'fruit-merge-rl', title: 'スイカゲーム強化学習', year: 2025, category: 'RL', group: 'AI・学習',
     shortDescription: '合成パズルの物理環境と報酬を自作し、PPOと遺伝的アルゴリズムで方策を学習。',
     role: '物理環境の自作 / 報酬設計 / PPO・GA学習', tech: ['Python', 'pymunk', 'Gymnasium', 'Stable-Baselines3', 'PyTorch'],
+    coverImage: '/works/fruit-merge.png',
     sections: [
       chapter('overview', '概要', '果物を落とし、衝突で育てる物理環境を一から作る。', ['スイカゲーム風の合成パズルをpymunkで実装し、Gymnasium環境として学習器へ接続しました。半径10pxから100pxまでの果物11種があり、同種同士の衝突を合成キューへ積み、物理ステップ後に新しい果物へ差し替えます。'], ['11 FRUITS', 'RADIUS 10 → 100px']),
       chapter('role', '自分の担当', '物理環境、観測と行動、報酬、2つの学習系を構築。', ['衝突と合成を含む環境、PPOの並列学習、チェックポイントと評価ログを実装しました。GA版では312→64→64→31のMLPを、pop50・エリート2・トーナメントk=3で進化させます。'], ['GA 26,207 PARAMETERS', 'POP 50 / ELITE 2 / TOURNAMENT k=3']),
@@ -245,6 +253,7 @@ export const works: readonly Work[] = [
     id: '13', slug: 'ai-secretary', title: 'AI秘書ワークスペース', year: 2026, category: 'AI Ops', group: 'プロダクト・ツール',
     shortDescription: 'Claude Codeを仮想組織として常駐運用し、情報整理と一日の段取りをスキルで自動化。',
     role: '運用設計 / スキル実装 / 3.5ヶ月の継続運用', tech: ['Claude Code', 'Skills', 'MCP', 'Python', 'Slack API'],
+    coverImage: '/works/ai-secretary-claude.png',
     sections: [
       chapter('overview', '概要', 'すべての入力を秘書が受け、一日の仕事へ整理する。', ['Claude Codeを「秘書のいる仮想組織」として常駐運用する個人ワークスペースです。土台にはオープンソースのcc-companyプラグインを導入し、フォルダを部署とする構造の上に、自作スキル8本と運用ルールを構築しました。'], ['OPEN SOURCE cc-company BASE', '8 CUSTOM SKILLS']),
       chapter('role', '自分の担当', '日々使い続けられる情報経路と自動化スキルを設計。', ['プラグイン導入後の運用設計、自作スキルの実装、外部サービスとの接続、日々の改善を担当しました。入力は秘書が受け、inboxからtodos・notes・journalへ目的別に振り分けます。']),
@@ -258,6 +267,7 @@ export const works: readonly Work[] = [
     id: '14', slug: 'ai-paper-trader', title: 'AI模擬トレーダー', year: 2026, category: 'Web App', group: 'プロダクト・ツール',
     shortDescription: 'AIによる日本株の模擬売買を、判断理由と資産推移から観察するWebアプリ。',
     role: 'フルスタック実装 / AI運用の観察設計', tech: ['FastAPI', 'SQLite', 'React', 'TypeScript', 'Recharts'],
+    coverImage: '/works/ai-paper-trader.png',
     sections: [
       chapter('overview', '概要', 'AIの模擬売買を、理由と資産の変化から観察する。', ['仮想資金100万円の日本株ポートフォリオをClaudeが模擬売買し、判断理由つきの取引ログと資産推移を表示するWebアプリです。実際のお金は動かず、すべてシミュレーションとして運用します。'], ['VIRTUAL CAPITAL ¥1,000,000', 'PAPER TRADING ONLY']),
       chapter('role', '自分の担当', '取引APIから記録、ダッシュボードまでを一貫して実装。', ['FastAPIとSQLiteのバックエンド、Reactのフロントエンド、AIが状態を読み直す運用経路を実装しました。コード規模はPython 541行、TS/TSX 675行です。'], ['PYTHON 541 LINES', 'TS/TSX 675 LINES']),
@@ -285,7 +295,7 @@ export const works: readonly Work[] = [
     id: '16', slug: 'tracking-cat', title: 'デスクトップの猫', year: 2025, category: 'Desktop Mascot', group: '表現・身体',
     shortDescription: '作業を邪魔せず、すべてのデスクトップでマウスを追いかける透明な猫。',
     role: 'Electron実装 / ウィンドウ透過の設計', tech: ['Electron', 'JavaScript', 'CSS'],
-    coverImage: '/works/tracking-cat.gif',
+    coverImage: '/works/tracking-cat2.gif',
     sections: [
       chapter('overview', '概要', 'クリックを通しながら、猫だけがマウスを追いかける。', ['デスクトップ全面を覆う透明なElectronウィンドウ上を、GIFの猫がマウスに追従して歩くマスコットです。全119行で、下のアプリをそのまま操作できます。'], ['119 LINES', 'TRANSPARENT / CLICK-THROUGH']),
       chapter('role', '自分の担当', '透明ウィンドウと、邪魔をしない追従挙動を実装。', ['Electronのウィンドウ設定、rendererの追従、向きの切り替え、作業領域への配置を担当しました。透過はframe:false・transparent:true・hasShadow:false、setBackgroundColor(\'#00000000\')、CSSのbackground:transparentという3層で通しています。'], ['3-LAYER TRANSPARENCY']),
@@ -313,6 +323,7 @@ export const works: readonly Work[] = [
     id: '18', slug: 'site-blocker', title: 'サイトブロッカー', year: 2025, category: 'Extension', group: 'プロダクト・ツール',
     shortDescription: 'YouTubeを見る自分を、タスク管理シートへ強制的に戻すChrome拡張。',
     role: '自分用ツールの即席実装', tech: ['Chrome Extension', 'Manifest V3'],
+    coverImage: '/works/site-blocker-card.png',
     sections: [
       chapter('overview', '概要', '見すぎたサイトから、やるべきことの一覧へ強制的に戻す。', ['YouTube Shortsを見すぎる自分を止めるために作ったChrome拡張です。対象URLを開くと、ブロック専用ページではなく、自分のタスク管理スプレッドシートへタブごと移動させます。'], ['DEPENDENCIES 0']),
       chapter('role', '自分の担当', '必要な判定だけを、9分で使える道具にする。', ['service workerは35行、manifestは18行で、依存はありません。ファイル更新時刻では着手から完成まで9分でした。'], ['SERVICE WORKER 35 LINES', 'MANIFEST 18 LINES', '9 min']),
