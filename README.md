@@ -8,7 +8,7 @@ npm run typecheck
 SITE_URL=https://your-domain.example npm run build
 ```
 
-`npm run build` は TypeScript と Vite に続けて `scripts/prerender.mjs` を実行し、トップ、作品一覧、作品詳細10件、人物、連絡、404の実HTMLと `sitemap.xml` / `robots.txt` を `dist/` に生成します。本番サイト生成では `SITE_URL` を必ず公開originへ設定してください。未指定時のcanonicalは `https://portfolio.example.com` です。`npm run build:site` も同じビルドを呼び出します。
+`npm run build` は TypeScript と Vite に続けて `scripts/prerender.mjs` を実行し、トップ、作品一覧、作品詳細18件、人物、連絡、404の実HTMLと `sitemap.xml` / `robots.txt` を `dist/` に生成します。本番サイト生成では `SITE_URL` を必ず公開originへ設定してください。未指定時のcanonicalは `https://portfolio.example.com` です。`npm run build:site` も同じビルドを呼び出します。
 
 GitHub Pagesのサブパスへ出す場合は、公開URL全体を `SITE_URL`、リポジトリ部分を `GHPAGES_BASE` に渡します。例: `SITE_URL=https://user.github.io/repository GHPAGES_BASE=/repository/ npm run build`。
 

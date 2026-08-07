@@ -72,9 +72,26 @@ for (const [name, route] of desktopRoutes) {
   await page.close()
 }
 
-const slugs = ['aiment', 'quoridor-ai', 'linegraphify', 'preference-fractal', 'tsubooji', 'bird-tracking', 'board-game-ai', 'evolving-car', 'tetris-explosion']
+const newSlugs = ['cooking-ai-league', 'fruit-merge-rl', 'ai-secretary', 'ai-paper-trader', 'vowel-viz', 'tracking-cat', 'fairy-assistant', 'site-blocker']
+const slugs = ['aiment', 'quoridor-ai', 'linegraphify', 'preference-fractal', 'tsubooji', 'bird-tracking', 'board-game-ai', 'evolving-car', 'tetris-explosion', ...newSlugs]
+const expectedCoverImages = {
+  'vowel-viz': '/works/voiceai-ui.png',
+  'tracking-cat': '/works/tracking-cat.gif',
+  'fairy-assistant': '/works/fairy.gif',
+}
 for (const slug of slugs) {
   const page = await capture(desktop, `desktop-detail-${slug}`, `/works/${slug}`, false)
+  if (expectedCoverImages[slug]) {
+    const cover = await page.locator('.work-cover').evaluate((image) => ({
+      tag: image.tagName,
+      src: image.getAttribute('src'),
+      loaded: image.complete && image.naturalWidth > 0 && image.naturalHeight > 0,
+    }))
+    if (cover.tag !== 'IMG' || !cover.loaded || !cover.src?.endsWith(expectedCoverImages[slug])) {
+      errors.push(`desktop-detail-${slug}: invalid cover ${JSON.stringify(cover)}`)
+    }
+    results.push({ [`desktop-detail-${slug}-cover`]: cover })
+  }
   await page.close()
 }
 
@@ -94,10 +111,10 @@ const filterPage = await desktop.newPage()
 await filterPage.goto(`${baseURL}/works`, { waitUntil: 'networkidle' })
 const chipLabels = await filterPage.locator('.work-filter-chip').allTextContents()
 const expectedFilters = {
-  'すべて': ['tsukuyomi', 'aiment', 'quoridor-ai', 'linegraphify', 'preference-fractal', 'tsubooji', 'bird-tracking', 'board-game-ai', 'evolving-car', 'tetris-explosion'],
-  'AI・学習': ['tsukuyomi', 'quoridor-ai', 'preference-fractal', 'tsubooji', 'board-game-ai', 'evolving-car'],
-  'プロダクト・ツール': ['aiment', 'linegraphify'],
-  '表現・身体': ['bird-tracking', 'tetris-explosion'],
+  'すべて': ['tsukuyomi', 'aiment', 'quoridor-ai', 'linegraphify', 'preference-fractal', 'tsubooji', 'bird-tracking', 'board-game-ai', 'evolving-car', 'tetris-explosion', ...newSlugs],
+  'AI・学習': ['tsukuyomi', 'quoridor-ai', 'preference-fractal', 'tsubooji', 'board-game-ai', 'evolving-car', 'cooking-ai-league', 'fruit-merge-rl'],
+  'プロダクト・ツール': ['aiment', 'linegraphify', 'ai-secretary', 'ai-paper-trader', 'site-blocker'],
+  '表現・身体': ['bird-tracking', 'tetris-explosion', 'vowel-viz', 'tracking-cat', 'fairy-assistant'],
 }
 if (JSON.stringify(chipLabels) !== JSON.stringify(Object.keys(expectedFilters))) {
   errors.push(`works-filter: wrong chips ${JSON.stringify(chipLabels)}`)
@@ -108,6 +125,22 @@ for (const [label, expected] of Object.entries(expectedFilters)) {
   if (JSON.stringify(actual) !== JSON.stringify(expected)) errors.push(`works-filter ${label}: ${JSON.stringify(actual)}`)
 }
 results.push({ filters: chipLabels })
+await filterPage.getByRole('button', { name: 'すべて', exact: true }).click()
+for (const [slug, expectedSrc] of Object.entries(expectedCoverImages)) {
+  await filterPage.locator(`.work-row[href$="/${slug}"]`).hover()
+  const coverImage = filterPage.locator('.preview-media-swap > div:last-child .preview-cover')
+  await coverImage.waitFor({ state: 'visible' })
+  await coverImage.evaluate((image) => image.complete || new Promise((resolve) => image.addEventListener('load', resolve, { once: true })))
+  const cover = await coverImage.evaluate((image) => ({
+    tag: image.tagName,
+    src: image.getAttribute('src'),
+    loaded: image.complete && image.naturalWidth > 0 && image.naturalHeight > 0,
+  }))
+  if (cover.tag !== 'IMG' || !cover.loaded || !cover.src?.endsWith(expectedSrc)) {
+    errors.push(`works-preview-${slug}: invalid cover ${JSON.stringify(cover)}`)
+  }
+  results.push({ [`works-preview-${slug}-cover`]: cover })
+}
 await filterPage.close()
 
 const progressPage = await desktop.newPage()
@@ -134,6 +167,7 @@ const mobileRoutes = [
   ['mobile-works', '/works'],
   ['mobile-detail', '/works/tsukuyomi'],
   ['mobile-linegraphify', '/works/linegraphify'],
+  ...newSlugs.map((slug) => [`mobile-detail-${slug}`, `/works/${slug}`]),
   ['mobile-about', '/about'],
   ['mobile-contact', '/contact'],
   ['mobile-404', '/missing-page'],
