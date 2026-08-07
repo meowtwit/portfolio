@@ -103,10 +103,12 @@ function FanOccluder({ run }: { run: TransitionRun }) {
       const progress = clamp(elapsed / run.duration)
       // three phases: unfold 0..0.4, hold 0.4..0.6 (the route swaps under full
       // cover), fold 0.6..1. The leading edge moves with an eased sweep; the
-      // trailing edge stays shut until the fold, so the close is the same
-      // motion played from the other side — the part the client loves.
-      const lead = easeInOut(clamp(progress / 0.4))
-      const trail = easeInOut(clamp((progress - 0.6) / 0.4))
+      // trailing edge stays at the pivot. During fold, the leading edge
+      // retraces its opening path from the upper-right toward the lower-left.
+      const lead = progress < 0.6
+        ? easeInOut(clamp(progress / 0.4))
+        : easeInOut(1 - clamp((progress - 0.6) / 0.4))
+      const trail = 0
       const { w, h } = size.current
       blade.current?.setAttribute('d', fanPath(w, h, lead, trail))
       const cx = w

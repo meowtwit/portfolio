@@ -3,18 +3,18 @@ import { works } from '../data/works'
 import { A } from '../router/A'
 import { WorkPreviewPane } from './WorkPreviewPane'
 
-const ALL_CATEGORIES = 'すべて'
-const categories = [ALL_CATEGORIES, ...new Set(works.map((work) => work.category))]
+const ALL_GROUPS = 'すべて'
+const groups = [ALL_GROUPS, 'AI・学習', 'プロダクト・ツール', '表現・身体'] as const
 
 export function WorksIndex({ initialSlug }: { initialSlug?: string | null }) {
   const initialIndex = Math.max(0, works.findIndex((work) => work.slug === initialSlug))
   const [selectedSlug, setSelectedSlug] = useState(works[initialIndex].slug)
-  const [selectedCategory, setSelectedCategory] = useState(ALL_CATEGORIES)
+  const [selectedGroup, setSelectedGroup] = useState<string>(ALL_GROUPS)
   const rowRefs = useRef<Array<HTMLAnchorElement | null>>([])
-  const categoryRefs = useRef<Array<HTMLButtonElement | null>>([])
-  const filteredWorks = selectedCategory === ALL_CATEGORIES
+  const groupRefs = useRef<Array<HTMLButtonElement | null>>([])
+  const filteredWorks = selectedGroup === ALL_GROUPS
     ? works
-    : works.filter((work) => work.category === selectedCategory)
+    : works.filter((work) => work.group === selectedGroup)
   const selected = filteredWorks.find((work) => work.slug === selectedSlug) ?? filteredWorks[0]
 
   const move = (event: KeyboardEvent<HTMLAnchorElement>, next: number) => {
@@ -30,35 +30,35 @@ export function WorksIndex({ initialSlug }: { initialSlug?: string | null }) {
     const index = event.key === 'Home'
       ? 0
       : event.key === 'End'
-        ? categories.length - 1
-        : (next + categories.length) % categories.length
-    categoryRefs.current[index]?.focus()
+        ? groups.length - 1
+        : (next + groups.length) % groups.length
+    groupRefs.current[index]?.focus()
   }
 
-  const selectCategory = (category: string) => {
-    const nextWorks = category === ALL_CATEGORIES
+  const selectGroup = (group: string) => {
+    const nextWorks = group === ALL_GROUPS
       ? works
-      : works.filter((work) => work.category === category)
-    setSelectedCategory(category)
+      : works.filter((work) => work.group === group)
+    setSelectedGroup(group)
     if (!nextWorks.some((work) => work.slug === selectedSlug)) setSelectedSlug(nextWorks[0].slug)
   }
 
   return (
     <>
       <section className="work-filters" aria-labelledby="work-filter-title">
-        <div className="work-filters__label" id="work-filter-title">CATEGORY / FILTER</div>
-        <div className="work-filter-chips" role="group" aria-label="作品カテゴリ">
-          {categories.map((category, index) => (
+        <div className="work-filters__label" id="work-filter-title">GROUP / FILTER</div>
+        <div className="work-filter-chips" role="group" aria-label="作品グループ">
+          {groups.map((group, index) => (
             <button
-              key={category}
-              ref={(node) => { categoryRefs.current[index] = node }}
+              key={group}
+              ref={(node) => { groupRefs.current[index] = node }}
               type="button"
-              aria-pressed={selectedCategory === category}
+              aria-pressed={selectedGroup === group}
               className="work-filter-chip"
-              onClick={() => selectCategory(category)}
+              onClick={() => selectGroup(group)}
               onKeyDown={(event) => moveCategory(event, index + (event.key === 'ArrowLeft' ? -1 : 1))}
             >
-              {category}
+              {group}
             </button>
           ))}
         </div>

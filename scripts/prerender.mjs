@@ -98,14 +98,14 @@ const pages = [
     pathname: '/',
     title: siteName,
     description: '早雲楓人のポートフォリオ。AI、ソフトウェア、フィジカルシステムを、現場で動く形まで実装した制作記録。',
-    body: `<h1>考えた仕組みを、<br>動くところまでつくる。</h1><p>AI / SOFTWARE / PHYSICAL SYSTEMS</p><p><a href="${routeHref('/works')}">12件の作品を見る</a></p><h2>制作領域</h2><p>探索・学習・評価、プロダクト・運用、身体・環境・入力を横断して制作しています。</p>`,
+    body: `<h1>考えた仕組みを、<br>動くところまでつくる。</h1><p>AI / SOFTWARE / PHYSICAL SYSTEMS</p><p><a href="${routeHref('/works')}">${works.length}件の作品を見る</a></p><h2>制作領域</h2><p>探索・学習・評価、プロダクト・運用、身体・環境・入力を横断して制作しています。</p>`,
     schema: { '@context': 'https://schema.org', '@type': 'WebSite', name: siteName, url: absoluteUrl('/'), author: personLd },
   },
   {
     pathname: '/works',
     title: '作品 — 早雲楓人',
-    description: '早雲楓人の作品12件。AI、ソフトウェア、オートメーション、ロボティクスなどの設計・実装・検証を紹介します。',
-    body: `<h1>作品</h1><p>見てほしい順に固定した12件の作品です。</p>${workList()}`,
+    description: `早雲楓人の作品${works.length}件。AI、ソフトウェア、オートメーション、ロボティクスなどの設計・実装・検証を紹介します。`,
+    body: `<h1>作品</h1><p>見てほしい順に固定した${works.length}件の作品です。</p>${workList()}`,
     schema: {
       '@context': 'https://schema.org', '@type': 'CollectionPage', name: '作品 — 早雲楓人', url: absoluteUrl('/works'),
       hasPart: works.map((work) => ({ '@type': 'CreativeWork', name: work.title, url: absoluteUrl(`/works/${work.slug}`) })),

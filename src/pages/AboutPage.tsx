@@ -11,7 +11,6 @@ export function AboutPage() {
       </header>
 
       <section className="profile-intro" aria-labelledby="profile-title">
-        <div className="profile-index" aria-hidden="true"><span>01</span><div><i /><i /></div></div>
         <div>
           <p className="section-kicker">PROFILE</p>
           <h2 id="profile-title">仕組みを考え、<br />現場で動く形まで持っていく。</h2>
@@ -36,10 +35,10 @@ export function AboutPage() {
         </ol>
       </section>
 
-      <section className="about-outro" aria-label="技術以外の側面">
-        <p>OUTSIDE TECHNOLOGY</p>
-        <h2>踊ることは、時間と身体を<br />言葉より先に理解すること。</h2>
-        <p>ダンスや表現で得た「間」と「伝わり方」も、制作の判断に持ち込んでいます。</p>
+      <section className="about-outro" aria-label="表現について">
+        <p>EXPRESSION / ACROSS MEDIA</p>
+        <h2>つくることも、踊ることも、<br />表現すること。</h2>
+        <p>プログラミングもダンスも、考えていることを外に出して伝える手段です。手段が違っても、伝わる形まで持っていくことは変わりません。</p>
       </section>
     </main>
   )

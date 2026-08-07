@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, type CSSProperties } from 'react'
+import { works } from '../data/works'
 import { A } from '../router/A'
 
 export function IntroScenes() {
   const domains = useRef<HTMLElement>(null)
   const breadth = useRef<HTMLElement>(null)
   const exit = useRef<HTMLElement>(null)
-  const [domainState, setDomainState] = useState({ active: 0, tick: 0 })
 
   useEffect(() => {
     let frame = 0
@@ -19,17 +19,13 @@ export function IntroScenes() {
       if (domains.current) {
         const progress = sceneProgress(domains.current)
         domains.current.style.setProperty('--scene-progress', progress.toFixed(4))
-        const active = Math.min(2, Math.floor(progress * 3))
-        setDomainState((current) => active === current.active
-          ? current
-          : { active, tick: current.tick + 1 })
       }
 
       if (breadth.current) {
         const progress = sceneProgress(breadth.current)
         breadth.current.style.setProperty('--scene-progress', progress.toFixed(4))
         breadth.current.querySelectorAll<HTMLElement>('.breadth-item').forEach((item, index) => {
-          const itemProgress = clamp((progress - index * 0.075) / 0.48)
+          const itemProgress = clamp((progress - index * 0.05) / 0.28)
           item.style.setProperty('--item-progress', Math.max(0.04, itemProgress).toFixed(4))
           item.style.setProperty('--item-shift', `${((1 - itemProgress) * 44).toFixed(2)}px`)
           item.style.setProperty('--item-mobile-shift', `${((1 - itemProgress) * -24).toFixed(2)}px`)
@@ -38,7 +34,8 @@ export function IntroScenes() {
 
       if (exit.current) {
         const progress = sceneProgress(exit.current)
-        const panelProgress = clamp(progress / 0.58)
+        const atDocumentEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1
+        const panelProgress = atDocumentEnd ? 1 : clamp(progress / 0.58)
         exit.current.style.setProperty('--scene-progress', progress.toFixed(4))
         exit.current.style.setProperty('--exit-panel-progress', Math.max(0.035, panelProgress).toFixed(4))
       }
@@ -72,7 +69,6 @@ export function IntroScenes() {
         <header className="scene-header"><span>SCENE 02</span><h2 id="domains-title">制作領域</h2><p>同じ仕組みが、置かれる場所によって役割を変える。</p></header>
         <div className="domain-map">
           <svg
-            className={domainState.tick === 0 ? '' : `domain-switch-${domainState.tick % 2 ? 'a' : 'b'}`}
             width="420"
             height="420"
             viewBox="0 0 420 420"
@@ -84,9 +80,9 @@ export function IntroScenes() {
             <path className="domain-draw domain-draw--axes" pathLength="1" d="M210 36V384M46 210H374" stroke="currentColor" />
             <circle className="domain-core" cx="210" cy="210" r="13" fill="currentColor" />
           </svg>
-          <ol aria-label="スクロール位置に対応する制作領域">
-            {domainsList.map((domain, index) => (
-              <li key={domain[0]} className={index === domainState.active ? 'is-active' : ''} aria-current={index === domainState.active ? 'step' : undefined}>
+          <ol aria-label="制作領域">
+            {domainsList.map((domain) => (
+              <li key={domain[0]}>
                 <b>{domain[0]}</b><span>{domain[1]}</span><small>{domain[2]}</small>
               </li>
             ))}
@@ -115,7 +111,7 @@ export function IntroScenes() {
         <header className="scene-header"><span>SCENE 04</span><h2 id="exit-title">次に見るものを選ぶ</h2></header>
         <div className="exit-split">
           <A href="/works" className="exit-link exit-link--dark">
-            <small>12 PROJECTS / INDEX</small><strong>作品を見る</strong><span aria-hidden="true">→</span>
+            <small>{works.length} PROJECTS / INDEX</small><strong>作品を見る</strong><span aria-hidden="true">→</span>
           </A>
           <A href="/about" className="exit-link">
             <small>PROFILE / TIMELINE</small><strong>人物を知る</strong><span aria-hidden="true">→</span>

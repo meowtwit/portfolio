@@ -7,7 +7,7 @@ import {
   type TransitionSnapshot,
 } from './components/TransitionLayer'
 import { WorkDetailLayout } from './components/WorkDetailLayout'
-import { findWork } from './data/works'
+import { findWork, works } from './data/works'
 import { AboutPage } from './pages/AboutPage'
 import { ContactPage } from './pages/ContactPage'
 import { HomePage } from './pages/HomePage'
@@ -169,7 +169,7 @@ export default function App() {
     }
     if (pathname === '/works') return {
       title: '作品 — 早雲楓人',
-      description: '早雲楓人の作品12件。AI、ソフトウェア、オートメーション、ロボティクスなどの設計・実装・検証を紹介します。',
+      description: `早雲楓人の作品${works.length}件。AI、ソフトウェア、オートメーション、ロボティクスなどの設計・実装・検証を紹介します。`,
       noindex: false,
       page: <WorksPage initialSlug={worksSelection} />,
     }

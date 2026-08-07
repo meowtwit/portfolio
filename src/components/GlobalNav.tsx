@@ -15,7 +15,6 @@ export function GlobalNav({ pathname }: { pathname: string }) {
     <header className="global-nav">
       <nav className="global-nav__inner" aria-label="主要ナビゲーション">
         <A className="global-nav__name" href="/" aria-current={pathname === '/' ? 'page' : undefined}>
-          <span className="nav-mark" aria-hidden="true"><i /><i /></span>
           <span>早雲楓人</span>
         </A>
         <div className="global-nav__links">

@@ -2,13 +2,13 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import type { Work } from '../data/works'
 import { A } from '../router/A'
 import { withBasePath } from '../router/history'
-import { GeometryPreview } from './GeometryPreview'
+import { WorkPlate } from './WorkPlate'
 
 function PreviewVisual({ work }: { work: Work }) {
   if (work.coverImage) {
     return <img className="preview-cover" src={withBasePath(work.coverImage)} alt={`${work.title}の制作画像`} />
   }
-  return <GeometryPreview work={work} />
+  return <WorkPlate work={work} />
 }
 
 export function WorkPreviewPane({ work }: { work: Work }) {

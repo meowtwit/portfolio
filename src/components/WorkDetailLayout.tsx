@@ -3,13 +3,13 @@ import type { Work } from '../data/works'
 import { works } from '../data/works'
 import { A, useNavigate } from '../router/A'
 import { withBasePath } from '../router/history'
-import { GeometryPreview } from './GeometryPreview'
+import { WorkPlate } from './WorkPlate'
 
 function WorkMedia({ work }: { work: Work }) {
   if (work.coverImage) return <img className="work-cover" data-transition-media src={withBasePath(work.coverImage)} alt={`${work.title}の制作画像`} />
   return (
-    <div className="detail-geometry-media" data-transition-media role="img" aria-label={`${work.title}の幾何プレビュー`}>
-      <GeometryPreview work={work} />
+    <div className="detail-plate-media" data-transition-media role="img" aria-label={`${work.title}の作品情報プレート`}>
+      <WorkPlate work={work} />
     </div>
   )
 }
@@ -39,7 +39,7 @@ export function WorkDetailLayout({ work }: { work: Work }) {
         <header className="work-hero">
           <div className="work-hero__title">
             <p className="eyebrow"><span>{work.id}</span> WORK DETAIL</p>
-            <h1 tabIndex={-1}>{work.title}</h1>
+            <h1 className={work.title.length >= 10 ? 'is-long-title' : undefined} tabIndex={-1}>{work.title}</h1>
             <p className="work-hero__claim">{work.shortDescription}</p>
           </div>
           <WorkMedia work={work} />

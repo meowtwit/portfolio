@@ -9,7 +9,6 @@ const ajaxEndpoint = `https://formsubmit.co/ajax/${encodeURIComponent(CONTACT_FO
 export function ContactPage() {
   const [status, setStatus] = useState<SubmissionStatus>('idle')
   const contacts = profile.links.filter((link) => link.kind === 'contact')
-  const socials = profile.links.filter((link) => link.kind === 'social')
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -100,15 +99,9 @@ export function ContactPage() {
       </section>
 
       <section className="contact-note" aria-labelledby="message-title">
-        <span className="contact-note__mark" aria-hidden="true"><i /><i /></span>
         <div><p>MESSAGE</p><h2 id="message-title">まだ要件が固まっていなくても大丈夫です。</h2></div>
         <p>作りたいもの、困っていること、話してみたいテーマを短く送ってください。内容を確認して返信します。</p>
       </section>
-
-      <nav className="social-links" aria-label="外部リンク">
-        <span>EXTERNAL / SNS</span>
-        <div>{socials.map((link) => <a href={link.href} key={link.label}>{link.label}<b aria-hidden="true">↗</b></a>)}</div>
-      </nav>
     </main>
   )
 }
