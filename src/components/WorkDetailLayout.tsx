@@ -5,6 +5,14 @@ import { A, useNavigate } from '../router/A'
 import { withBasePath } from '../router/history'
 import { WorkPlate } from './WorkPlate'
 
+/** 折り返し不能な最長単位の実効幅（CJK=1、欧文=0.6）。これが大きいタイトルだけ縮小する */
+function longestUnitWeight(work: Work): number {
+  const units = work.titleLines ?? work.title.split(/\s+/)
+  return Math.max(...units.map((unit) =>
+    [...unit].reduce((sum, ch) => sum + (/[ -ɏ]/.test(ch) ? 0.6 : 1), 0),
+  ))
+}
+
 function WorkMedia({ work }: { work: Work }) {
   if (work.coverImage) return <img className="work-cover" data-transition-media src={withBasePath(work.coverImage)} alt={`${work.title}の制作画像`} />
   return (
@@ -39,7 +47,13 @@ export function WorkDetailLayout({ work }: { work: Work }) {
         <header className="work-hero">
           <div className="work-hero__title">
             <p className="eyebrow"><span>{work.id}</span> WORK DETAIL</p>
-            <h1 className={work.title.length >= 10 ? 'is-long-title' : undefined} tabIndex={-1}>{work.title}</h1>
+            <h1 className={longestUnitWeight(work) > 5 ? 'is-long-title' : undefined} tabIndex={-1}>
+              {work.titleLines
+                ? work.titleLines.map((line, index) => (
+                    <span key={line}>{index > 0 && <wbr />}{line}</span>
+                  ))
+                : work.title}
+            </h1>
             <p className="work-hero__claim">{work.shortDescription}</p>
           </div>
           <WorkMedia work={work} />

@@ -30,6 +30,8 @@ export interface Work {
   role: string
   tech: readonly string[]
   coverImage?: string
+  /** ヒーロー見出しの改行点。指定時は keep-all + <wbr> でこの区切りでのみ折り返す */
+  titleLines?: readonly string[]
   previewVideo?: string
   sections: readonly WorkSection[]
   links: readonly WorkLink[]
@@ -112,6 +114,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '03', slug: 'quoridor-ai', title: 'コリドールAI', year: 2026, category: 'Game AI', group: 'AI・学習',
+    titleLines: ['コリドール', 'AI'],
     shortDescription: '複数の思考エンジンを差し替え、経路と壁の一手を比較するボードゲームAI。',
     role: 'アルゴリズム設計 / C++実装 / 対戦評価', tech: ['C++20', 'MCTS', 'Beam Search'],
     coverImage: '/works/quoridor-gui.png',
@@ -140,9 +143,10 @@ export const works: readonly Work[] = [
   },
   {
     id: '05', slug: 'preference-fractal', title: '選好学習フラクタル', year: 2026, category: 'Research', group: 'AI・学習',
+    titleLines: ['選好学習', 'フラクタル'],
     shortDescription: '二択を繰り返すだけで、生成結果が使う人の好みへ近づく選好学習実験。',
     role: '研究設計 / PyTorch実装 / 実験', tech: ['PyTorch', 'Bradley–Terry', 'Generative Art'],
-    coverImage: '/works/fractal-phoenix.png',
+    coverImage: '/works/fractal-grid.png',
     sections: [
       chapter('overview', '概要', '言葉にしにくい好みを、左右の選択から学ぶ。', ['2枚から好みを選ぶ行為を学習信号にし、5種のフラクタル生成パラメータへ反映します。']),
       chapter('role', '自分の担当', '生成・比較・学習のループを一人で設計。', ['UI、データ保存、Bradley–Terry型の選好モデル、生成器との接続を実装しました。']),
@@ -154,6 +158,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '06', slug: 'tsubooji', title: '壺の強化学習', year: 2026, category: 'RL', group: 'AI・学習',
+    titleLines: ['壺の', '強化学習'],
     shortDescription: 'ハンマー一本で登る挙動を、物理環境と報酬設計から学ばせる強化学習。',
     role: '環境構築 / 報酬設計 / PPO学習', tech: ['Python', 'PPO', 'Physics Simulation'],
     coverImage: '/works/tsubooji.png',
@@ -168,6 +173,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '07', slug: 'bird-tracking', title: '羽ばたきトラッキング', year: 2025, category: 'Robotics', group: '表現・身体',
+    titleLines: ['羽ばたき', 'トラッキング'],
     shortDescription: '腕の上下を6点の骨格から読み、画面の鳥の羽ばたきへ変換する体験。',
     role: '体験設計 / 姿勢推定 / フロントエンド', tech: ['TypeScript', 'MediaPipe', 'Canvas'],
     coverImage: '/works/bird-tracking.png',
@@ -182,6 +188,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '08', slug: 'board-game-ai', title: 'ボードゲームAI', year: 2025, category: 'Game AI', group: 'AI・学習',
+    titleLines: ['ボードゲーム', 'AI'],
     shortDescription: '友人が考案した5×5のボードゲームに、対戦AIとブラウザで遊べる環境を実装。',
     role: 'AI実装 / C++実装 / WebAssembly移植', tech: ['C++', 'Expectimax', 'WebAssembly'],
     coverImage: '/works/board-game-ai.png',
@@ -196,6 +203,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '09', slug: 'evolving-car', title: '進化する自動運転', year: 2025, category: 'ML', group: 'AI・学習',
+    titleLines: ['進化する', '自動運転'],
     shortDescription: '5本の距離レイを入力とするニューラルネットワークを進化させ、層構成ごとの走行方策を比較。',
     role: 'シミュレーション / 進化的学習 / 比較実験', tech: ['Python', 'Genetic Algorithm', 'Neural Network'],
     coverImage: '/works/evolving-car.png',
@@ -224,8 +232,10 @@ export const works: readonly Work[] = [
   },
   {
     id: '11', slug: 'cooking-ai-league', title: 'はじめてのおつかい', year: 2025, category: 'Digital Twin', group: 'AI・学習',
+    titleLines: ['はじめての', 'おつかい'],
     shortDescription: '体育の授業で自作した競技をデジタルツイン化し、5種のAIでメタ戦法を探してルール調整へ還元。',
     role: '競技設計 / 環境設計 / 5種の学習器実装 / リーグ評価', tech: ['Python', 'CEM', 'GA', 'REINFORCE', 'Q-Learning'],
+    coverImage: '/works/cooking-league.png',
     sections: [
       chapter('overview', '概要', '体育の授業で作った競技を、AIが先に何度も試すデジタルツインへ。', ['「はじめてのおつかい」は、体育の授業で自作した、スーパーを模したフィールドで食材を取り合い、完成したレシピの得点を競う競技です。人間の大会前に支配的な戦法を見つけてルールを調整するため、競技をデジタルツイン化し、5種のAIが戦うリーグを構築しました。食材7種・行動8種・レシピ6種を使い、全レシピの組合せはDFSで厳密に全探索します。最高得点のレシピはスペシャルカレーの12点で、余った食材は1個につき-2点です。'], ['7 INGREDIENTS / 8 ACTIONS', '6 RECIPES / STOCK 56']),
       chapter('role', '自分の担当', '競技そのものの設計から、5種の学習器、評価と可視化までを担当。', ['体育の授業で行う競技の設計に加え、シミュレーション環境、CEM・GA・REINFORCE・Q学習・自己符号化NNの実装、学習済みモデルの保存、リーグ評価を担当しました。pygameでは1600×960の棚とレジ行列を描画でき、cooking_ai.pyは1,351行です。'], ['5 LEARNERS', 'PYGAME 1600×960', '1,351 LINES']),
@@ -237,6 +247,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '12', slug: 'fruit-merge-rl', title: 'スイカゲーム強化学習', year: 2025, category: 'RL', group: 'AI・学習',
+    titleLines: ['スイカゲーム', '強化学習'],
     shortDescription: '合成パズルの物理環境と報酬を自作し、PPOと遺伝的アルゴリズムで方策を学習。',
     role: '物理環境の自作 / 報酬設計 / PPO・GA学習', tech: ['Python', 'pymunk', 'Gymnasium', 'Stable-Baselines3', 'PyTorch'],
     coverImage: '/works/fruit-merge.png',
@@ -251,9 +262,10 @@ export const works: readonly Work[] = [
   },
   {
     id: '13', slug: 'ai-secretary', title: 'AI秘書ワークスペース', year: 2026, category: 'AI Ops', group: 'プロダクト・ツール',
+    titleLines: ['AI秘書', 'ワークスペース'],
     shortDescription: 'Claude Codeを仮想組織として常駐運用し、情報整理と一日の段取りをスキルで自動化。',
     role: '運用設計 / スキル実装 / 3.5ヶ月の継続運用', tech: ['Claude Code', 'Skills', 'MCP', 'Python', 'Slack API'],
-    coverImage: '/works/ai-secretary-claude.png',
+    coverImage: '/works/ai-secretary-blocks.png',
     sections: [
       chapter('overview', '概要', 'すべての入力を秘書が受け、一日の仕事へ整理する。', ['Claude Codeを「秘書のいる仮想組織」として常駐運用する個人ワークスペースです。土台にはオープンソースのcc-companyプラグインを導入し、フォルダを部署とする構造の上に、自作スキル8本と運用ルールを構築しました。'], ['OPEN SOURCE cc-company BASE', '8 CUSTOM SKILLS']),
       chapter('role', '自分の担当', '日々使い続けられる情報経路と自動化スキルを設計。', ['プラグイン導入後の運用設計、自作スキルの実装、外部サービスとの接続、日々の改善を担当しました。入力は秘書が受け、inboxからtodos・notes・journalへ目的別に振り分けます。']),
@@ -265,6 +277,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '14', slug: 'ai-paper-trader', title: 'AI模擬トレーダー', year: 2026, category: 'Web App', group: 'プロダクト・ツール',
+    titleLines: ['AI模擬', 'トレーダー'],
     shortDescription: 'AIによる日本株の模擬売買を、判断理由と資産推移から観察するWebアプリ。',
     role: 'フルスタック実装 / AI運用の観察設計', tech: ['FastAPI', 'SQLite', 'React', 'TypeScript', 'Recharts'],
     coverImage: '/works/ai-paper-trader.png',
@@ -279,6 +292,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '15', slug: 'vowel-viz', title: '母音の物理', year: 2025, category: 'Research', group: '表現・身体',
+    titleLines: ['母音の', '物理'],
     shortDescription: '声道の形を動かし、断面積・フォルマント・合成音の関係を確かめる対話ツール。',
     role: '声道モデル設計 / DSP自前実装 / 可視化', tech: ['Python', 'NumPy', 'Matplotlib', 'DSP'],
     coverImage: '/works/voiceai-ui.png',
@@ -293,6 +307,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '16', slug: 'tracking-cat', title: 'デスクトップの猫', year: 2025, category: 'Desktop Mascot', group: '表現・身体',
+    titleLines: ['デスクトップ', 'の猫'],
     shortDescription: '作業を邪魔せず、すべてのデスクトップでマウスを追いかける透明な猫。',
     role: 'Electron実装 / ウィンドウ透過の設計', tech: ['Electron', 'JavaScript', 'CSS'],
     coverImage: '/works/tracking-cat2.gif',
@@ -307,6 +322,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '17', slug: 'fairy-assistant', title: 'デスクトップ妖精', year: 2025, category: 'Experiment', group: '表現・身体',
+    titleLines: ['デスクトップ', '妖精'],
     shortDescription: '画面を読み、助言を返す妖精を目指した実験段階のデスクトップマスコット。',
     role: '構想 / renderer実装 / LLM接続検証', tech: ['Electron', 'Tesseract.js', 'LLM API'],
     coverImage: '/works/fairy.gif',
@@ -321,6 +337,7 @@ export const works: readonly Work[] = [
   },
   {
     id: '18', slug: 'site-blocker', title: 'サイトブロッカー', year: 2025, category: 'Extension', group: 'プロダクト・ツール',
+    titleLines: ['サイト', 'ブロッカー'],
     shortDescription: 'YouTubeを見る自分を、タスク管理シートへ強制的に戻すChrome拡張。',
     role: '自分用ツールの即席実装', tech: ['Chrome Extension', 'Manifest V3'],
     coverImage: '/works/site-blocker-card.png',

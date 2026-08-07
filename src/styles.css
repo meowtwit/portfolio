@@ -378,11 +378,12 @@ img, svg { display: block; max-width: 100%; }
 .detail-breadcrumb { display: flex; gap: 12px; padding: 28px 0; border-bottom: 1px solid #000; font: 11px var(--mono); }
 .detail-breadcrumb a { text-decoration: underline; text-underline-offset: 4px; }
 .work-hero { padding: clamp(62px, 8vw, 120px) 0 clamp(72px, 9vw, 130px); }
-.work-hero__title { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(30px, 7vw, 110px); align-items: end; margin-bottom: clamp(48px, 7vw, 100px); }
+.work-hero__title { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .65fr); gap: clamp(30px, 6vw, 90px); align-items: end; margin-bottom: clamp(48px, 7vw, 100px); }
 .work-hero__title .eyebrow { grid-column: 1 / -1; }
-.work-hero__title h1 { min-width: 0; margin: 0; font-size: clamp(58px, 9vw, 138px); line-height: .88; letter-spacing: -.07em; overflow-wrap: anywhere; }
+.work-hero__title h1 { min-width: 0; margin: 0; font-size: clamp(58px, 9vw, 138px); line-height: .96; letter-spacing: -.07em; word-break: keep-all; overflow-wrap: normal; }
+.work-hero__title h1 span { white-space: nowrap; }
 .work-hero__title h1.is-long-title { font-size: clamp(48px, 6.4vw, 96px); letter-spacing: -.055em; }
-.work-hero__claim { margin: 0; padding-bottom: 6px; font-size: clamp(20px, 2.1vw, 31px); font-weight: 700; line-height: 1.7; }
+.work-hero__claim { margin: 0; padding-bottom: 6px; font-size: clamp(16px, 1.6vw, 22px); font-weight: 700; line-height: 1.85; word-break: auto-phrase; text-wrap: pretty; }
 .work-cover { display: block; width: 100%; max-width: 100%; max-height: 760px; aspect-ratio: 16/9; border: 1px solid #000; background: #fff; object-fit: contain; }
 .detail-plate-media { width: 100%; background: #fff; }
 .work-meta { display: grid; grid-template-columns: 120px 180px 1fr; margin-top: 16px; border: 1px solid #000; }
@@ -607,7 +608,7 @@ img, svg { display: block; max-width: 100%; }
   .work-hero__title .eyebrow { margin-bottom: 38px; }
   .work-hero__title h1 { font-size: clamp(54px, 17vw, 86px); }
   .work-hero__title h1.is-long-title { font-size: clamp(42px, 12vw, 58px); }
-  .work-hero__claim { margin-top: 34px; font-size: 19px; }
+  .work-hero__claim { margin-top: 34px; font-size: 17px; }
   .work-meta { grid-template-columns: 80px 1fr; }
   .work-meta span { min-height: 44px; font-size: 9px; }
   .work-meta span:nth-child(2) { border-right: 0; }
